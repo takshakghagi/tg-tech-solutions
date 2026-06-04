@@ -259,11 +259,7 @@ CREATE TABLE IF NOT EXISTS reviews (
 
     -- Constraints
     CONSTRAINT chk_rating CHECK (rating BETWEEN 1 AND 5),
-    CONSTRAINT chk_review_target
-        CHECK (
-            (service_id IS NOT NULL AND note_id IS NULL) OR
-            (service_id IS NULL AND note_id IS NOT NULL)
-        ),
+    
 
     -- Foreign Keys
     CONSTRAINT fk_reviews_user
@@ -398,11 +394,7 @@ CREATE TABLE IF NOT EXISTS favorites (
     -- Constraints: Ek cheez ek hi baar favorite ho
     CONSTRAINT uq_fav_service UNIQUE (user_id, service_id),
     CONSTRAINT uq_fav_note    UNIQUE (user_id, note_id),
-    CONSTRAINT chk_fav_target
-        CHECK (
-            (service_id IS NOT NULL AND note_id IS NULL) OR
-            (service_id IS NULL AND note_id IS NOT NULL)
-        ),
+    
 
     -- Foreign Keys
     CONSTRAINT fk_favorites_user
