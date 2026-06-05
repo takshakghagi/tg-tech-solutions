@@ -235,18 +235,22 @@ export default function About() {
                   backdropFilter: 'blur(20px)', textAlign: 'center'
                 }}
               >
-                {/* Avatar */}
-                <div style={{
-                  width: '140px', height: '140px', borderRadius: '50%',
-                  background: 'linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7)',
-                  margin: '0 auto 20px',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '56px', fontWeight: 900, color: '#fff',
-                  boxShadow: '0 0 50px rgba(99,102,241,0.5)',
-                  border: '4px solid rgba(255,255,255,0.1)'
-                }}>
-                  T
-                </div>
+                {/* Avatar — Real Photo */}
+<div style={{
+  width: '140px', height: '140px', borderRadius: '50%',
+  margin: '0 auto 20px', overflow: 'hidden',
+  boxShadow: '0 0 50px rgba(99,102,241,0.5)',
+  border: '4px solid rgba(255,255,255,0.1)'
+}}>
+  <img
+    src="https://res.cloudinary.com/dkkwdzs49/image/upload/f_auto,q_auto/WhatsApp_Image_2026-05-31_at_8.14.16_AM_opf8xu.jpg"
+    alt="Takshak Ghagi"
+    style={{
+      width: '100%', height: '100%',
+      objectFit: 'cover', objectPosition: 'center top'
+    }}
+  />
+</div>
 
                 <h2 style={{ color: '#fff', fontWeight: 800, fontSize: '24px', marginBottom: '6px' }}>
                   Takshak Ghagi
