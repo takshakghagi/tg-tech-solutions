@@ -29,13 +29,19 @@ const register = async (req, res) => {
     const expiry = getOTPExpiry(10);
     await User.updateOTP(userId, otp, expiry);
     
-    // Send OTP email — non blocking
-    sendOTPEmail(email, name, otp).catch(e => 
-      logger.error(`OTP email failed: ${e.message}`)
-    );
-
-    logger.info(`New user registered: ${email}`);
-    return ApiResponse.created(res, { userId }, 'Registration successful! Please verify your email.');
+    if (process.env.NODE_ENV === 'production') {
+      await User.verifyUser(userId);
+      logger.info(`Auto-verified in production: ${email}`);
+      return ApiResponse.created(res, { 
+        userId, 
+        auto_verified: true 
+      }, 'Registration successful! You can now login.');
+    } else {
+      sendOTPEmail(email, name, otp).catch(e => 
+        logger.error(`OTP email failed: ${e.message}`)
+      );
+      return ApiResponse.created(res, { userId }, 'Registration successful! Please verify your email.');
+    }
   } catch (error) {
     logger.error(`Register error: ${error.message}`);
     return ApiResponse.error(res, error.message);

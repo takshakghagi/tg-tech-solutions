@@ -19,19 +19,26 @@ export default function Register() {
   const [otp,     setOtp]     = useState('');
   const navigate = useNavigate();
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      await API.post('/auth/register', form);
+
+const handleRegister = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  try {
+    const { data } = await API.post('/auth/register', form);
+    
+    if (data.data?.auto_verified) {
+      toast.success('Registration successful! Please login. 🎉');
+      navigate('/login');
+    } else {
       toast.success('OTP sent to your email!');
       setStep(2);
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Registration failed!');
-    } finally {
-      setLoading(false);
     }
-  };
+  } catch (err) {
+    toast.error(err.response?.data?.message || 'Registration failed!');
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleVerifyOTP = async (e) => {
     e.preventDefault();
