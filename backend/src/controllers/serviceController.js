@@ -4,7 +4,7 @@ const ApiResponse = require('../utils/apiResponse');
 const getAllServices = async (req, res) => {
   try {
     const [services] = await pool.query(
-      'SELECT * FROM services WHERE is_active = 1 ORDER BY sort_order ASC'
+      'SELECT * FROM services WHERE is_active = 1 ORDER BY created_at ASC'
     );
     return ApiResponse.success(res, { services });
   } catch (error) {
