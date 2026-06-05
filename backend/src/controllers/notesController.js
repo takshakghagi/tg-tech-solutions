@@ -13,7 +13,7 @@ const getAllNotes = async (req, res) => {
     let query  = `SELECT id, title, slug, subject, description,
                   course, semester, price, is_free, thumbnail,
                   file_size, total_pages, language, downloads,
-                  rating, total_ratings, created_at
+                  rating, created_at
                   FROM notes WHERE is_active = 1`;
     let countQ = 'SELECT COUNT(*) AS total FROM notes WHERE is_active = 1';
     const params      = [];

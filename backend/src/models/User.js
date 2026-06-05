@@ -62,7 +62,7 @@ class User {
 
   static async getAll({ page = 1, limit = 10, search = '', role = '' }) {
     const offset = (page - 1) * limit;
-    let query  = 'SELECT id, name, email, role, phone, city, is_verified, is_active, created_at FROM users WHERE 1=1';
+    let query = 'SELECT id, name, email, role, phone, is_verified, is_active, created_at FROM users WHERE 1=1';
     let countQ = 'SELECT COUNT(*) as total FROM users WHERE 1=1';
     const params = [];
 

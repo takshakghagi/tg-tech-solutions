@@ -12,7 +12,7 @@ const getDashboard = async (req, res) => {
     const [pending]      = await pool.query("SELECT COUNT(*) AS count FROM orders WHERE status = 'pending'");
     const [inProgress]   = await pool.query("SELECT COUNT(*) AS count FROM orders WHERE status = 'in_progress'");
     const [completed]    = await pool.query("SELECT COUNT(*) AS count FROM orders WHERE status = 'completed'");
-    const [revenue]      = await pool.query("SELECT COALESCE(SUM(amount), 0) AS total FROM payments WHERE status = 'success'");
+    const [revenue]      = await pool.query("SELECT COALESCE(SUM(amount), 0) AS total FROM payments WHERE status = 'paid'");
     const [monthRevenue] = await pool.query(
       "SELECT COALESCE(SUM(amount), 0) AS total FROM payments WHERE status = 'Paid' AND MONTH(created_at) = MONTH(NOW()) AND YEAR(created_at) = YEAR(NOW())"
     );
@@ -27,7 +27,7 @@ const getDashboard = async (req, res) => {
     const [revenueChart] = await pool.query(
       `SELECT DATE_FORMAT(created_at, '%Y-%m') AS month,
               SUM(amount) AS revenue, COUNT(*) AS orders
-       FROM payments WHERE status = 'success'
+       FROM payments WHERE status = 'paid'
        GROUP BY DATE_FORMAT(created_at, '%Y-%m')
        ORDER BY month DESC LIMIT 12`
     );
@@ -156,7 +156,7 @@ const updateOrderStatus = async (req, res) => {
     await Notification.create({
       user_id:    order.user_id,
       title:      `Order ${order.order_number} Update`,
-      message:    `Aapka order status: ${status.toUpperCase()}. ${admin_note || ''}`,
+      message:    `Your order status updated to: ${status.toUpperCase()}`,
       type:       'order_update',
       action_url: `/dashboard/orders/${order.id}`
     });
