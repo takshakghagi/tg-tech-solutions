@@ -36,14 +36,11 @@ const allowedOrigins = [
 ].filter(Boolean);
 
 app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (mobile apps, curl, Postman)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) return callback(null, true);
-    // Allow any vercel.app subdomain for this project
-    if (/^https:\/\/tg-tech-solutions.*\.vercel\.app$/.test(origin)) return callback(null, true);
-    callback(new Error(`CORS blocked: ${origin}`));
-  },
+  origin: [
+    'http://localhost:5173',
+    'https://tg-tech-solutions-m5gy.vercel.app',
+    process.env.FRONTEND_URL
+  ],
   credentials: true,
   methods:     ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization']
