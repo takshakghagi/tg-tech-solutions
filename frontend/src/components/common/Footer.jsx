@@ -1,241 +1,166 @@
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import {
-  FaInstagram, FaLinkedin, FaGithub,
-  FaWhatsapp, FaEnvelope, FaMapMarkerAlt
-} from 'react-icons/fa';
-import { MdPhone } from 'react-icons/md';
-
-const footerLinks = {
-  Services: [
-    { label: 'Web Development',    path: '/services' },
-    { label: 'App Development',    path: '/services' },
-    { label: 'Final Year Project', path: '/services' },
-    { label: 'Notes Store',        path: '/notes'    },
-    { label: 'Documentation',      path: '/services' },
-    { label: 'Graphic Design',     path: '/services' },
-  ],
-  Company: [
-    { label: 'About Us',  path: '/about'    },
-    { label: 'Portfolio', path: '/portfolio' },
-    { label: 'Blog',      path: '/blog'      },
-    { label: 'Reviews',   path: '/reviews'   },
-    { label: 'Contact',   path: '/contact'   },
-  ],
-  Account: [
-    { label: 'Login',     path: '/login'              },
-    { label: 'Register',  path: '/register'            },
-    { label: 'Dashboard', path: '/dashboard'           },
-    { label: 'My Orders', path: '/dashboard/orders'    },
-    { label: 'Downloads', path: '/dashboard/downloads' },
-  ],
-};
-
-const TGLogoFooter = () => (
-  <svg width="44" height="44" viewBox="0 0 240 240">
-    <defs>
-      <linearGradient id="ftgt" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#fbbf24"/>
-        <stop offset="100%" stopColor="#f59e0b"/>
-      </linearGradient>
-      <linearGradient id="ftgg" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#fde68a"/>
-        <stop offset="100%" stopColor="#d97706"/>
-      </linearGradient>
-    </defs>
-    <path id="ftgcp" d="M120,120 m-105,0 a105,105 0 1,1 210,0 a105,105 0 1,1 -210,0" fill="none"/>
-    <text fontSize="11" letterSpacing="10" fontFamily="Georgia,serif" fill="#fde68a" opacity="0.8">
-      <textPath href="#ftgcp" startOffset="2%">TG TECH SOLUTIONS · NAGPUR ·</textPath>
-    </text>
-    <text x="28" y="175" fontSize="155" fontWeight="700" fill="url(#ftgt)" fontFamily="Georgia,serif">T</text>
-    <text x="95" y="172" fontSize="130" fontWeight="400" fill="none" stroke="url(#ftgg)" strokeWidth="3" fontFamily="Georgia,serif">G</text>
-    <circle cx="204" cy="115" r="9" fill="#f59e0b"/>
-    <circle cx="204" cy="115" r="4.5" fill="#fef3c7"/>
-  </svg>
-);
+import { FaWhatsapp, FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa';
+import { MdEmail, MdPhone, MdLocationOn } from 'react-icons/md';
 
 export default function Footer() {
+  const year = new Date().getFullYear();
+
   return (
     <footer style={{
-      background: 'linear-gradient(180deg, #0f0f1a 0%, #080810 100%)',
-      borderTop: '1px solid rgba(245,158,11,0.2)',
-      paddingTop: '60px'
+      background: 'linear-gradient(180deg, #0a0a18 0%, #03030a 100%)',
+      borderTop: '1px solid rgba(99,102,241,0.2)',
+      padding: '60px 24px 24px'
     }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
 
-        {/* Top Section */}
+        {/* Main Grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: '1.8fr 1fr 1fr 1fr 1.5fr',
-          gap: '32px',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: '40px',
           marginBottom: '48px'
         }}>
 
           {/* Brand */}
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-              <TGLogoFooter />
+              <div style={{
+                width: '44px', height: '44px', borderRadius: '12px',
+                background: 'linear-gradient(135deg,#fbbf24,#f59e0b)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontWeight: 900, fontSize: '18px', color: '#000'
+              }}>TG</div>
               <div>
-                <p style={{ color: '#fff', fontWeight: 700, fontSize: '16px' }}>TG Tech Solutions</p>
-                <p style={{
-                  background: 'linear-gradient(90deg,#fbbf24,#f59e0b)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  fontSize: '12px'
-                }}>Nagpur, Maharashtra</p>
+                <p style={{ color: '#fff', fontWeight: 800, fontSize: '16px', margin: 0 }}>TG Tech Solutions</p>
+                <p style={{ color: '#f59e0b', fontSize: '11px', margin: 0, letterSpacing: '2px' }}>NAGPUR</p>
               </div>
             </div>
-            <p style={{ color: '#9ca3af', fontSize: '13px', lineHeight: 1.7, marginBottom: '20px' }}>
-              Professional IT services — Web Development, Mobile Apps, Final Year Projects, Notes & More.
+            <p style={{ color: '#6b7280', fontSize: '14px', lineHeight: 1.7, marginBottom: '20px' }}>
+              Professional IT services for students & businesses. Quality work at affordable prices.
             </p>
-
-            {/* Social Links */}
-            <div style={{ display: 'flex', gap: '10px' }}>
+            <div style={{ display: 'flex', gap: '12px' }}>
               {[
-                { icon: FaInstagram, color: '#e1306c', href: 'https://instagram.com'      },
-                { icon: FaLinkedin,  color: '#0077b5', href: 'https://linkedin.com'       },
-                { icon: FaGithub,    color: '#fff',    href: 'https://github.com'         },
-                { icon: FaWhatsapp,  color: '#25d366', href: 'https://wa.me/917020521466' },
-              ].map(({ icon: Icon, color, href }, i) => (
-                <motion.a
-                  key={i}
-                  href={href}
-                  target="_blank"
-                  rel="noreferrer"
-                  whileHover={{ scale: 1.2, y: -3 }}
-                  style={{
-                    width: '36px', height: '36px', borderRadius: '10px',
-                    background: 'rgba(255,255,255,0.05)',
-                    border: '1px solid rgba(255,255,255,0.1)',
+                { icon: FaWhatsapp, href: 'https://wa.me/917020521466', color: '#25d366' },
+                { icon: FaInstagram, href: '#', color: '#e1306c' },
+                { icon: FaLinkedin, href: '#', color: '#0077b5' },
+                { icon: FaGithub, href: 'https://github.com/takshakghagi', color: '#fff' },
+              ].map(({ icon: Icon, href, color }, i) => (
+                <a key={i} href={href} target="_blank" rel="noreferrer"
+                  style={{ width: '36px', height: '36px', borderRadius: '8px',
+                    background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color, transition: 'all 0.2s'
-                  }}
-                >
+                    color, transition: 'all 0.2s' }}>
                   <Icon size={16} />
-                </motion.a>
+                </a>
               ))}
             </div>
           </div>
 
           {/* Services */}
           <div>
-            <h3 style={{ color: '#fff', fontWeight: 600, marginBottom: '16px', fontSize: '14px' }}>
-              Services
-            </h3>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              {footerLinks.Services.map(link => (
-                <li key={link.label} style={{ marginBottom: '10px' }}>
-                  <Link to={link.path}>
-                    <motion.span
-                      whileHover={{ x: 5, color: '#fbbf24' }}
-                      style={{ color: '#9ca3af', fontSize: '13px', display: 'inline-block', transition: 'all 0.2s' }}
-                    >
-                      {link.label}
-                    </motion.span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <h3 style={{ color: '#fff', fontWeight: 700, fontSize: '15px', marginBottom: '16px' }}>Services</h3>
+            {['Website Development', 'Mobile App', 'Final Year Project', 'IT Notes', 'Documentation', 'Graphic Design'].map(s => (
+              <Link key={s} to="/services" style={{ textDecoration: 'none' }}>
+                <p style={{ color: '#6b7280', fontSize: '13px', marginBottom: '10px',
+                  cursor: 'pointer', transition: 'color 0.2s' }}
+                  onMouseEnter={e => e.target.style.color = '#fbbf24'}
+                  onMouseLeave={e => e.target.style.color = '#6b7280'}>
+                  {s}
+                </p>
+              </Link>
+            ))}
           </div>
 
           {/* Company */}
           <div>
-            <h3 style={{ color: '#fff', fontWeight: 600, marginBottom: '16px', fontSize: '14px' }}>
-              Company
-            </h3>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              {footerLinks.Company.map(link => (
-                <li key={link.label} style={{ marginBottom: '10px' }}>
-                  <Link to={link.path}>
-                    <motion.span
-                      whileHover={{ x: 5, color: '#fbbf24' }}
-                      style={{ color: '#9ca3af', fontSize: '13px', display: 'inline-block', transition: 'all 0.2s' }}
-                    >
-                      {link.label}
-                    </motion.span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <h3 style={{ color: '#fff', fontWeight: 700, fontSize: '15px', marginBottom: '16px' }}>Company</h3>
+            {[
+              { label: 'Home', path: '/' },
+              { label: 'About', path: '/about' },
+              { label: 'Portfolio', path: '/portfolio' },
+              { label: 'Blog', path: '/blog' },
+              { label: 'Reviews', path: '/reviews' },
+              { label: 'Contact', path: '/contact' },
+            ].map(({ label, path }) => (
+              <Link key={label} to={path} style={{ textDecoration: 'none' }}>
+                <p style={{ color: '#6b7280', fontSize: '13px', marginBottom: '10px', cursor: 'pointer' }}
+                  onMouseEnter={e => e.target.style.color = '#fbbf24'}
+                  onMouseLeave={e => e.target.style.color = '#6b7280'}>
+                  {label}
+                </p>
+              </Link>
+            ))}
           </div>
 
-          {/* Account */}
+          {/* Contact */}
           <div>
-            <h3 style={{ color: '#fff', fontWeight: 600, marginBottom: '16px', fontSize: '14px' }}>
-              Account
-            </h3>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              {footerLinks.Account.map(link => (
-                <li key={link.label} style={{ marginBottom: '10px' }}>
-                  <Link to={link.path}>
-                    <motion.span
-                      whileHover={{ x: 5, color: '#fbbf24' }}
-                      style={{ color: '#9ca3af', fontSize: '13px', display: 'inline-block', transition: 'all 0.2s' }}
-                    >
-                      {link.label}
-                    </motion.span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact Us */}
-          <div>
-            <h3 style={{ color: '#fff', fontWeight: 600, marginBottom: '16px', fontSize: '14px' }}>
-              Contact Us
-            </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {[
-                { icon: MdPhone,        text: '+91 7020521466',         href: 'tel:+917020521466'             },
-                { icon: FaWhatsapp,     text: 'WhatsApp Chat',          href: 'https://wa.me/917020521466'    },
-                { icon: FaEnvelope,     text: 'ghagitakshak@gmail.com', href: 'mailto:ghagitakshak@gmail.com' },
-                { icon: FaMapMarkerAlt, text: 'Nagpur, Maharashtra',    href: '#'                              },
-              ].map(({ icon: Icon, text, href }, i) => (
-                <motion.a
-                  key={i}
-                  href={href}
-                  target={href.startsWith('http') ? '_blank' : '_self'}
-                  rel="noreferrer"
-                  whileHover={{ x: 5 }}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '10px',
-                    color: '#9ca3af', fontSize: '13px', textDecoration: 'none'
-                  }}
-                >
-                  <Icon size={15} style={{ color: '#f59e0b', flexShrink: 0 }} />
-                  {text}
-                </motion.a>
-              ))}
+            <h3 style={{ color: '#fff', fontWeight: 700, fontSize: '15px', marginBottom: '16px' }}>Contact Us</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <a href="tel:+917020521466" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: '32px', height: '32px', borderRadius: '8px',
+                  background: 'rgba(99,102,241,0.15)', display: 'flex', alignItems: 'center',
+                  justifyContent: 'center', flexShrink: 0 }}>
+                  <MdPhone size={16} style={{ color: '#6366f1' }} />
+                </div>
+                <span style={{ color: '#9ca3af', fontSize: '13px' }}>+91 7020521466</span>
+              </a>
+              <a href="mailto:ghagitakshak@gmail.com" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: '32px', height: '32px', borderRadius: '8px',
+                  background: 'rgba(99,102,241,0.15)', display: 'flex', alignItems: 'center',
+                  justifyContent: 'center', flexShrink: 0 }}>
+                  <MdEmail size={16} style={{ color: '#6366f1' }} />
+                </div>
+                <span style={{ color: '#9ca3af', fontSize: '13px' }}>ghagitakshak@gmail.com</span>
+              </a>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                <div style={{ width: '32px', height: '32px', borderRadius: '8px',
+                  background: 'rgba(99,102,241,0.15)', display: 'flex', alignItems: 'center',
+                  justifyContent: 'center', flexShrink: 0, marginTop: '2px' }}>
+                  <MdLocationOn size={16} style={{ color: '#6366f1' }} />
+                </div>
+                <span style={{ color: '#9ca3af', fontSize: '13px', lineHeight: 1.5 }}>
+                  Nagpur, Maharashtra,<br />India — 440001
+                </span>
+              </div>
+              <a href="https://wa.me/917020521466" target="_blank" rel="noreferrer"
+                style={{ textDecoration: 'none' }}>
+                <button style={{
+                  display: 'flex', alignItems: 'center', gap: '8px',
+                  padding: '10px 20px', borderRadius: '10px',
+                  background: 'rgba(37,211,102,0.15)',
+                  border: '1px solid rgba(37,211,102,0.4)',
+                  color: '#25d366', cursor: 'pointer', fontSize: '13px',
+                  fontWeight: 600, width: '100%', justifyContent: 'center'
+                }}>
+                  <FaWhatsapp size={16} /> Chat on WhatsApp
+                </button>
+              </a>
             </div>
           </div>
         </div>
 
-        {/* Bottom */}
+        {/* Bottom Bar */}
         <div style={{
-          borderTop: '1px solid rgba(255,255,255,0.05)',
-          padding: '24px 0',
+          borderTop: '1px solid rgba(255,255,255,0.06)',
+          paddingTop: '24px',
           display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
           flexWrap: 'wrap',
+          justifyContent: 'space-between',
+          alignItems: 'center',
           gap: '12px'
         }}>
-          <p style={{ color: '#6b7280', fontSize: '13px' }}>
-            © 2024 TG Tech Solutions. All rights reserved.
+          <p style={{ color: '#4b5563', fontSize: '13px', margin: 0 }}>
+            © {year} TG Tech Solutions. All rights reserved.
           </p>
-          <p style={{ color: '#6b7280', fontSize: '13px' }}>
-            Made with ❤️ by{' '}
-            <span style={{
-              background: 'linear-gradient(90deg,#fbbf24,#f59e0b)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              fontWeight: 600
-            }}>
-              Takshak Ghagi
-            </span>{' '}
-            — Nagpur
-          </p>
+          <div style={{ display: 'flex', gap: '20px' }}>
+            {['Privacy Policy', 'Terms of Service'].map(item => (
+              <span key={item} style={{ color: '#4b5563', fontSize: '13px', cursor: 'pointer' }}
+                onMouseEnter={e => e.target.style.color = '#fbbf24'}
+                onMouseLeave={e => e.target.style.color = '#4b5563'}>
+                {item}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </footer>
