@@ -39,14 +39,20 @@ export default function Navbar() {
   const [isOpen,   setIsOpen]   = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [dropdown, setDropdown] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
   const { user, logout }        = useAuth();
   const { connected }           = useSocket();
   const location                = useLocation();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   useEffect(() => { setIsOpen(false); setDropdown(false); }, [location]);
@@ -57,9 +63,9 @@ export default function Navbar() {
       animate={{ y: 0 }}
       style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
-        background: scrolled ? 'rgba(15,15,26,0.97)' : 'transparent',
-        backdropFilter: scrolled ? 'blur(20px)' : 'none',
-        borderBottom: scrolled ? '1px solid rgba(245,158,11,0.2)' : 'none',
+        background: scrolled ? 'rgba(15,15,26,0.97)' : 'rgba(15,15,26,0.8)',
+        backdropFilter: 'blur(20px)',
+        borderBottom: '1px solid rgba(245,158,11,0.15)',
         transition: 'all 0.3s ease'
       }}
     >
@@ -70,171 +76,216 @@ export default function Navbar() {
           <Link to="/" style={{ textDecoration: 'none' }}>
             <motion.div whileHover={{ scale: 1.05 }}
               style={{ display: 'flex', alignItems: 'center', gap: '8px', position: 'relative' }}>
-              <div style={{ position: 'absolute', bottom: '0px', left: '0px', width: '10px', height: '10px',
-                borderRadius: '50%', background: connected ? '#10b981' : '#6b7280',
-                border: '2px solid #0f0f1a', zIndex: 10 }} />
+              <div style={{
+                position: 'absolute', bottom: '0px', left: '0px',
+                width: '10px', height: '10px', borderRadius: '50%',
+                background: connected ? '#10b981' : '#6b7280',
+                border: '2px solid #0f0f1a', zIndex: 10
+              }} />
               <TGLogo />
               <div>
                 <p style={{ color: '#fff', fontWeight: 800, fontSize: '15px', lineHeight: 1, margin: 0 }}>TG Tech</p>
-                <p style={{ background: 'linear-gradient(90deg,#fbbf24,#f59e0b)', WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent', fontSize: '10px', fontWeight: 600, margin: 0 }}>Solutions</p>
+                <p style={{
+                  background: 'linear-gradient(90deg,#fbbf24,#f59e0b)',
+                  WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+                  fontSize: '10px', fontWeight: 600, margin: 0
+                }}>Solutions</p>
               </div>
             </motion.div>
           </Link>
 
           {/* Desktop Links */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}
-            className="hidden lg:flex">
-            {navLinks.map(link => (
-              <Link key={link.path} to={link.path} style={{ textDecoration: 'none' }}>
-                <motion.span whileHover={{ scale: 1.05 }} style={{
-                  padding: '6px 12px', borderRadius: '8px', fontSize: '13px',
-                  fontWeight: 500, display: 'block', cursor: 'pointer',
-                  color: location.pathname === link.path ? '#fbbf24' : '#d1d5db',
-                  background: location.pathname === link.path ? 'rgba(245,158,11,0.1)' : 'transparent',
-                }}>
-                  {link.label}
-                </motion.span>
-              </Link>
-            ))}
-          </div>
-
-          {/* Right Side */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }} className="hidden lg:flex">
-            {user ? (
-              <div style={{ position: 'relative' }}>
-                <motion.button whileHover={{ scale: 1.05 }} onClick={() => setDropdown(!dropdown)}
-                  style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '7px 14px',
-                    borderRadius: '10px', background: 'rgba(245,158,11,0.1)',
-                    border: '1px solid rgba(245,158,11,0.3)', color: '#fff', cursor: 'pointer' }}>
-                  <div style={{ width: '26px', height: '26px', borderRadius: '50%',
-                    background: 'linear-gradient(135deg,#fbbf24,#f59e0b)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '11px', fontWeight: 700, color: '#000' }}>
-                    {user.name?.charAt(0)}
-                  </div>
-                  <span style={{ fontSize: '13px' }}>{user.name?.split(' ')[0]}</span>
-                </motion.button>
-
-                <AnimatePresence>
-                  {dropdown && (
-                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
-                      style={{ position: 'absolute', right: 0, top: '48px', background: '#1a1a2e',
-                        border: '1px solid rgba(245,158,11,0.3)', borderRadius: '12px',
-                        padding: '8px', minWidth: '180px', zIndex: 9999 }}>
-                      <Link to={user.role === 'admin' ? '/admin/dashboard' : '/dashboard'}
-                        onClick={() => setDropdown(false)} style={{ textDecoration: 'none' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px',
-                          padding: '10px 12px', borderRadius: '8px', color: '#d1d5db',
-                          cursor: 'pointer', fontSize: '14px' }}>
-                          <MdDashboard size={18} /> Dashboard
-                        </div>
-                      </Link>
-                      <Link to="/dashboard/profile" onClick={() => setDropdown(false)} style={{ textDecoration: 'none' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px',
-                          padding: '10px 12px', borderRadius: '8px', color: '#d1d5db',
-                          cursor: 'pointer', fontSize: '14px' }}>
-                          <MdPerson size={18} /> Profile
-                        </div>
-                      </Link>
-                      <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', margin: '4px 0' }} />
-                      <button onClick={() => { logout(); setDropdown(false); }}
-                        style={{ display: 'flex', alignItems: 'center', gap: '10px',
-                          padding: '10px 12px', borderRadius: '8px', color: '#f87171',
-                          cursor: 'pointer', fontSize: '14px', width: '100%',
-                          background: 'transparent', border: 'none' }}>
-                        <MdLogout size={18} /> Logout
-                      </button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            ) : (
-              <>
-                <Link to="/login" style={{ textDecoration: 'none' }}>
-                  <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-                    style={{ padding: '7px 18px', borderRadius: '8px',
-                      border: '1px solid rgba(245,158,11,0.5)', color: '#fbbf24',
-                      background: 'transparent', cursor: 'pointer', fontSize: '13px' }}>
-                    Login
-                  </motion.button>
+          {!isMobile && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
+              {navLinks.map(link => (
+                <Link key={link.path} to={link.path} style={{ textDecoration: 'none' }}>
+                  <motion.span whileHover={{ scale: 1.05 }} style={{
+                    padding: '6px 12px', borderRadius: '8px', fontSize: '13px',
+                    fontWeight: 500, display: 'block', cursor: 'pointer',
+                    color: location.pathname === link.path ? '#fbbf24' : '#d1d5db',
+                    background: location.pathname === link.path ? 'rgba(245,158,11,0.1)' : 'transparent',
+                  }}>
+                    {link.label}
+                  </motion.span>
                 </Link>
-                <Link to="/register" style={{ textDecoration: 'none' }}>
-                  <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-                    style={{ padding: '7px 18px', borderRadius: '8px',
+              ))}
+            </div>
+          )}
+
+          {/* Desktop Right Buttons */}
+          {!isMobile && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              {user ? (
+                <div style={{ position: 'relative' }}>
+                  <motion.button whileHover={{ scale: 1.05 }} onClick={() => setDropdown(!dropdown)}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: '8px',
+                      padding: '7px 14px', borderRadius: '10px',
+                      background: 'rgba(245,158,11,0.1)',
+                      border: '1px solid rgba(245,158,11,0.3)',
+                      color: '#fff', cursor: 'pointer'
+                    }}>
+                    <div style={{
+                      width: '26px', height: '26px', borderRadius: '50%',
                       background: 'linear-gradient(135deg,#fbbf24,#f59e0b)',
-                      color: '#000', border: 'none', cursor: 'pointer',
-                      fontSize: '13px', fontWeight: 600 }}>
-                    Get Started
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: '11px', fontWeight: 700, color: '#000'
+                    }}>
+                      {user.name?.charAt(0)}
+                    </div>
+                    <span style={{ fontSize: '13px' }}>{user.name?.split(' ')[0]}</span>
                   </motion.button>
-                </Link>
-              </>
-            )}
-          </div>
 
-          {/* Mobile Menu Button */}
-          <button onClick={() => setIsOpen(!isOpen)} className="lg:hidden"
-            style={{ color: '#fff', background: 'transparent', border: 'none', cursor: 'pointer', padding: '8px' }}>
-            {isOpen ? <MdClose size={24} /> : <MdMenu size={24} />}
-          </button>
+                  <AnimatePresence>
+                    {dropdown && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
+                        style={{
+                          position: 'absolute', right: 0, top: '48px',
+                          background: '#1a1a2e', border: '1px solid rgba(245,158,11,0.3)',
+                          borderRadius: '12px', padding: '8px', minWidth: '180px', zIndex: 9999
+                        }}>
+                        <Link to={user.role === 'admin' ? '/admin/dashboard' : '/dashboard'}
+                          onClick={() => setDropdown(false)} style={{ textDecoration: 'none' }}>
+                          <div style={{
+                            display: 'flex', alignItems: 'center', gap: '10px',
+                            padding: '10px 12px', borderRadius: '8px',
+                            color: '#d1d5db', cursor: 'pointer', fontSize: '14px'
+                          }}>
+                            <MdDashboard size={18} /> Dashboard
+                          </div>
+                        </Link>
+                        <Link to="/dashboard/profile" onClick={() => setDropdown(false)} style={{ textDecoration: 'none' }}>
+                          <div style={{
+                            display: 'flex', alignItems: 'center', gap: '10px',
+                            padding: '10px 12px', borderRadius: '8px',
+                            color: '#d1d5db', cursor: 'pointer', fontSize: '14px'
+                          }}>
+                            <MdPerson size={18} /> Profile
+                          </div>
+                        </Link>
+                        <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', margin: '4px 0' }} />
+                        <button onClick={() => { logout(); setDropdown(false); }}
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: '10px',
+                            padding: '10px 12px', borderRadius: '8px', color: '#f87171',
+                            cursor: 'pointer', fontSize: '14px', width: '100%',
+                            background: 'transparent', border: 'none'
+                          }}>
+                          <MdLogout size={18} /> Logout
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ) : (
+                <>
+                  <Link to="/login" style={{ textDecoration: 'none' }}>
+                    <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+                      style={{
+                        padding: '7px 18px', borderRadius: '8px',
+                        border: '1px solid rgba(245,158,11,0.5)',
+                        color: '#fbbf24', background: 'transparent',
+                        cursor: 'pointer', fontSize: '13px'
+                      }}>Login</motion.button>
+                  </Link>
+                  <Link to="/register" style={{ textDecoration: 'none' }}>
+                    <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+                      style={{
+                        padding: '7px 18px', borderRadius: '8px',
+                        background: 'linear-gradient(135deg,#fbbf24,#f59e0b)',
+                        color: '#000', border: 'none', cursor: 'pointer',
+                        fontSize: '13px', fontWeight: 600
+                      }}>Get Started</motion.button>
+                  </Link>
+                </>
+              )}
+            </div>
+          )}
+
+          {/* Mobile Hamburger */}
+          {isMobile && (
+            <button onClick={() => setIsOpen(!isOpen)}
+              style={{
+                color: '#fff', background: 'rgba(255,255,255,0.08)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: '10px', cursor: 'pointer',
+                padding: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center'
+              }}>
+              {isOpen ? <MdClose size={22} /> : <MdMenu size={22} />}
+            </button>
+          )}
         </div>
       </div>
 
       {/* Mobile Menu */}
       <AnimatePresence>
-        {isOpen && (
+        {isOpen && isMobile && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            style={{ background: 'rgba(15,15,26,0.98)', borderTop: '1px solid rgba(245,158,11,0.2)',
-              padding: '12px 16px 20px', overflowY: 'auto', maxHeight: '80vh' }}>
+            style={{
+              background: 'rgba(10,10,20,0.99)',
+              borderTop: '1px solid rgba(245,158,11,0.2)',
+              padding: '12px 16px 24px',
+              overflowY: 'auto', maxHeight: '85vh'
+            }}>
 
+            {/* Nav Links */}
             {navLinks.map(link => (
               <Link key={link.path} to={link.path} style={{ textDecoration: 'none' }}>
-                <div style={{ padding: '12px 16px', borderRadius: '10px', marginBottom: '4px',
+                <div style={{
+                  padding: '13px 16px', borderRadius: '12px', marginBottom: '4px',
                   color: location.pathname === link.path ? '#fbbf24' : '#d1d5db',
                   background: location.pathname === link.path ? 'rgba(245,158,11,0.1)' : 'transparent',
-                  fontSize: '15px', fontWeight: 500 }}>
+                  fontSize: '15px', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '8px'
+                }}>
                   {link.label}
                 </div>
               </Link>
             ))}
 
-            <div style={{ display: 'flex', gap: '10px', marginTop: '16px', paddingTop: '16px',
-              borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+            {/* Mobile Auth Buttons */}
+            <div style={{
+              display: 'flex', gap: '10px', marginTop: '16px',
+              paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.08)'
+            }}>
               {user ? (
                 <>
-                  <Link to={user.role === 'admin' ? '/admin/dashboard' : '/dashboard'} style={{ flex: 1, textDecoration: 'none' }}>
-                    <button style={{ width: '100%', padding: '12px',
+                  <Link to={user.role === 'admin' ? '/admin/dashboard' : '/dashboard'}
+                    style={{ flex: 1, textDecoration: 'none' }}>
+                    <button style={{
+                      width: '100%', padding: '12px',
                       background: 'linear-gradient(135deg,#fbbf24,#f59e0b)',
-                      color: '#000', border: 'none', borderRadius: '10px',
-                      cursor: 'pointer', fontWeight: 600, fontSize: '14px' }}>
-                      Dashboard
-                    </button>
+                      color: '#000', border: 'none', borderRadius: '12px',
+                      cursor: 'pointer', fontWeight: 700, fontSize: '14px'
+                    }}>Dashboard</button>
                   </Link>
-                  <button onClick={logout} style={{ flex: 1, padding: '12px',
-                    border: '1px solid rgba(239,68,68,0.4)', color: '#f87171',
-                    background: 'transparent', borderRadius: '10px', cursor: 'pointer', fontSize: '14px' }}>
-                    Logout
-                  </button>
+                  <button onClick={logout} style={{
+                    flex: 1, padding: '12px',
+                    border: '1px solid rgba(239,68,68,0.4)',
+                    color: '#f87171', background: 'transparent',
+                    borderRadius: '12px', cursor: 'pointer', fontSize: '14px'
+                  }}>Logout</button>
                 </>
               ) : (
                 <>
                   <Link to="/login" style={{ flex: 1, textDecoration: 'none' }}>
-                    <button style={{ width: '100%', padding: '12px',
-                      border: '1px solid rgba(245,158,11,0.5)', color: '#fbbf24',
-                      background: 'transparent', borderRadius: '10px', cursor: 'pointer', fontWeight: 600 }}>
-                      Login
-                    </button>
+                    <button style={{
+                      width: '100%', padding: '12px',
+                      border: '1px solid rgba(245,158,11,0.5)',
+                      color: '#fbbf24', background: 'transparent',
+                      borderRadius: '12px', cursor: 'pointer', fontWeight: 600
+                    }}>Login</button>
                   </Link>
                   <Link to="/register" style={{ flex: 1, textDecoration: 'none' }}>
-                    <button style={{ width: '100%', padding: '12px',
+                    <button style={{
+                      width: '100%', padding: '12px',
                       background: 'linear-gradient(135deg,#fbbf24,#f59e0b)',
-                      color: '#000', border: 'none', borderRadius: '10px',
-                      cursor: 'pointer', fontWeight: 600 }}>
-                      Get Started
-                    </button>
+                      color: '#000', border: 'none',
+                      borderRadius: '12px', cursor: 'pointer', fontWeight: 700
+                    }}>Get Started</button>
                   </Link>
                 </>
               )}
