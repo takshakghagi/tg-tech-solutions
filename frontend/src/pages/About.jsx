@@ -243,7 +243,7 @@ export default function About() {
   border: '4px solid rgba(255,255,255,0.1)'
 }}>
   <img
-    src="https://res.cloudinary.com/dkkwdzs49/image/upload/f_auto,q_auto/WhatsApp_Image_2026-05-31_at_8.14.16_AM_opf8xu.jpg"
+    src="https://drive.google.com/file/d/12dMshq2eONeUWghoGekwEII1asz-yYjC/view?usp=drive_link.jpg"
     alt="Takshak Ghagi"
     style={{
       width: '100%', height: '100%',
