@@ -11,11 +11,9 @@ export default function AdminLayout() {
   if (loading) {
     return (
       <div style={{
-        minHeight:      '100vh',
-        display:        'flex',
-        alignItems:     'center',
-        justifyContent: 'center',
-        background:     '#0f0f1a'
+        minHeight: '100vh', display: 'flex',
+        alignItems: 'center', justifyContent: 'center',
+        background: '#0f0f1a'
       }}>
         <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
       </div>
@@ -26,40 +24,51 @@ export default function AdminLayout() {
     return <Navigate to="/admin/login" replace />;
   }
 
+  const isMobile = window.innerWidth < 1024;
+
   return (
     <div style={{
-      display:   'flex',
-      height:    '100vh',
-      width:     '100%',
-      overflow:  'hidden',
-      background:'#0f0f1a'
+      display: 'flex', height: '100vh', width: '100%',
+      overflow: 'hidden', background: '#0f0f1a',
+      position: 'relative'
     }}>
 
-      {/* Sidebar — Fixed 256px */}
+      {/* Mobile Overlay */}
+      {isOpen && isMobile && (
+        <div
+          onClick={() => setIsOpen(false)}
+          style={{
+            position: 'fixed', inset: 0,
+            background: 'rgba(0,0,0,0.7)',
+            zIndex: 40
+          }}
+        />
+      )}
+
+      {/* Sidebar */}
       <div style={{
-        width:     '256px',
-        minWidth:  '256px',
-        height:    '100vh',
-        overflowY: 'auto',
-        flexShrink: 0
+        position: isMobile ? 'fixed' : 'relative',
+        left: isMobile ? (isOpen ? '0' : '-280px') : '0',
+        top: 0, bottom: 0,
+        width: '256px', minWidth: '256px',
+        height: '100vh', overflowY: 'auto',
+        flexShrink: 0, zIndex: 50,
+        transition: 'left 0.3s ease'
       }}>
-        <AdminSidebar isOpen={true} setIsOpen={setIsOpen} />
+        <AdminSidebar isOpen={isOpen} setIsOpen={setIsOpen} />
       </div>
 
       {/* Main Area */}
       <div style={{
-        flex:          '1 1 0%',
-        display:       'flex',
-        flexDirection: 'column',
-        overflow:      'hidden',
-        height:        '100vh',
-        width:         '0'
+        flex: '1 1 0%', display: 'flex',
+        flexDirection: 'column', overflow: 'hidden',
+        height: '100vh', width: isMobile ? '100%' : '0',
+        marginLeft: isMobile ? '0' : '0'
       }}>
         <AdminNavbar setIsOpen={setIsOpen} />
         <main style={{
-          flex:      1,
-          overflowY: 'auto',
-          padding:   '24px'
+          flex: 1, overflowY: 'auto',
+          padding: isMobile ? '16px' : '24px'
         }}>
           <Outlet />
         </main>
