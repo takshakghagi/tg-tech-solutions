@@ -8,7 +8,8 @@ const generalLimiter = rateLimit({
     message: 'Too many requests. Please try again after 15 minutes.'
   },
   standardHeaders: true,
-  legacyHeaders:   false
+  legacyHeaders:   false,
+  validate: { xForwardedForHeader: false }
 });
 
 const authLimiter = rateLimit({
@@ -19,7 +20,8 @@ const authLimiter = rateLimit({
     message: 'Too many login attempts. Please try again after 15 minutes.'
   },
   standardHeaders: true,
-  legacyHeaders:   false
+  legacyHeaders:   false,
+  validate: { xForwardedForHeader: false }
 });
 
 const otpLimiter = rateLimit({
