@@ -14,7 +14,7 @@ const getDashboard = async (req, res) => {
     const [completed]    = await pool.query("SELECT COUNT(*) AS count FROM orders WHERE status = 'completed'");
     const [revenue]      = await pool.query("SELECT COALESCE(SUM(amount), 0) AS total FROM payments WHERE status = 'success'");
     const [monthRevenue] = await pool.query(
-      "SELECT COALESCE(SUM(amount), 0) AS total FROM payments WHERE status = 'success' AND MONTH(created_at) = MONTH(NOW()) AND YEAR(created_at) = YEAR(NOW())"
+      "SELECT COALESCE(SUM(amount), 0) AS total FROM payments WHERE status = 'Paid' AND MONTH(created_at) = MONTH(NOW()) AND YEAR(created_at) = YEAR(NOW())"
     );
     const [recentOrders] = await pool.query(
       `SELECT o.order_number, o.title, o.status, o.budget, o.created_at,
@@ -61,7 +61,7 @@ const getAllUsers = async (req, res) => {
     const search = req.query.search || '';
     const role   = req.query.role   || '';
 
-    let query  = 'SELECT id, name, email, role, phone, city, is_verified, is_active, created_at FROM users WHERE 1=1';
+    let query = 'SELECT id, name, email, role, phone, is_verified, is_active, created_at FROM users WHERE 1=1';
     let countQ = 'SELECT COUNT(*) AS total FROM users WHERE 1=1';
     const params = [], countParams = [];
 
