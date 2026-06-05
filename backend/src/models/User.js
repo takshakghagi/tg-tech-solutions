@@ -9,22 +9,22 @@ class User {
   }
 
   static async findById(id) {
-    const [rows] = await pool.execute(
-      'SELECT id, name, email, role, avatar, phone, city, bio, is_verified, is_active, created_at FROM users WHERE id = ?',
-      [id]
-    );
-    return rows[0] || null;
-  }
+  const [rows] = await pool.execute(
+    'SELECT id, name, email, role, avatar, phone, is_verified, is_active, created_at FROM users WHERE id = ?',
+    [id]
+  );
+  return rows[0] || null;
+}
 
   static async create(userData) {
-    const { name, email, password, phone, city } = userData;
-    const [result] = await pool.execute(
-      `INSERT INTO users (name, email, password, phone, city)
-       VALUES (?, ?, ?, ?, ?)`,
-      [name, email, password, phone || null, city || null]
-    );
-    return result.insertId;
-  }
+  const { name, email, password, phone } = userData;
+  const [result] = await pool.execute(
+    `INSERT INTO users (name, email, password, phone)
+     VALUES (?, ?, ?, ?)`,
+    [name, email, password, phone || null]
+  );
+  return result.insertId;
+}
 
   static async update(id, data) {
     const fields = Object.keys(data).map(k => `${k} = ?`).join(', ');
