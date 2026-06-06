@@ -24,9 +24,18 @@ export default function NotesStore() {
   const [total,       setTotal]       = useState(0);
   const [selected,    setSelected]    = useState(null);
   const [downloading, setDownloading] = useState(null);
+  const [winW,        setWinW]        = useState(window.innerWidth);
   const { user }    = useAuth();
   const navigate    = useNavigate();
   const { initiatePayment, loading: paymentLoading } = useRazorpay();
+
+  useEffect(() => {
+    const onResize = () => setWinW(window.innerWidth);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  const isMobile = winW < 640;
 
   const fetchNotes = async () => {
     setLoading(true);
@@ -47,7 +56,6 @@ export default function NotesStore() {
   };
 
   useEffect(() => { fetchNotes(); }, [page, course, filter]);
-
   useEffect(() => {
     const timer = setTimeout(() => fetchNotes(), 500);
     return () => clearTimeout(timer);
@@ -59,8 +67,6 @@ export default function NotesStore() {
       navigate('/login');
       return;
     }
-
-    // Free note
     if (note.is_free) {
       setDownloading(note.id);
       try {
@@ -74,8 +80,6 @@ export default function NotesStore() {
       }
       return;
     }
-
-    // Paid note — Razorpay
     initiatePayment({
       amount:      note.price,
       description: `Purchase: ${note.title}`,
@@ -90,17 +94,17 @@ export default function NotesStore() {
           toast.error('Download failed — contact support!');
         }
       },
-      onFailure: () => {
-        toast.error('Payment cancelled!');
-      }
+      onFailure: () => toast.error('Payment cancelled!')
     });
   };
 
   return (
     <Layout>
-      {/* Hero */}
+
+      {/* ── Hero ── */}
       <section style={{
-        padding: '100px 24px 60px', textAlign: 'center',
+        padding: isMobile ? '90px 20px 40px' : '100px 24px 60px',
+        textAlign: 'center',
         background: 'radial-gradient(ellipse at top, rgba(245,158,11,0.15) 0%, transparent 60%)'
       }}>
         <motion.div initial={{ opacity:0, y:-20 }} animate={{ opacity:1, y:0 }}
@@ -108,80 +112,90 @@ export default function NotesStore() {
           <span style={{
             display:'inline-block', padding:'6px 20px', borderRadius:'100px',
             background:'rgba(245,158,11,0.15)', border:'1px solid rgba(245,158,11,0.3)',
-            color:'#fbbf24', fontSize:'13px', marginBottom:'20px'
+            color:'#fbbf24', fontSize:'13px', marginBottom:'16px'
           }}>📚 Notes Store</span>
-          <h1 style={{ fontSize:'clamp(32px,5vw,56px)', fontWeight:800, color:'#fff', marginBottom:'20px' }}>
+          <h1 style={{
+            fontSize: isMobile ? '28px' : 'clamp(28px,5vw,52px)',
+            fontWeight:800, color:'#fff', marginBottom:'12px', lineHeight:1.2
+          }}>
             Study Smart with{' '}
             <span style={{
               background:'linear-gradient(135deg,#f59e0b,#fbbf24)',
               WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent'
             }}>Quality Notes</span>
           </h1>
-          <p style={{ color:'#9ca3af', fontSize:'18px', lineHeight:1.7 }}>
+          <p style={{ color:'#9ca3af', fontSize: isMobile ? '14px' : '17px', lineHeight:1.7 }}>
             Semester-wise notes for MCA, BCA, B.Tech students. Download instantly!
           </p>
         </motion.div>
       </section>
 
-      {/* Filters */}
-      <section style={{ padding:'0 24px 40px', maxWidth:'1200px', margin:'0 auto' }}>
-        <div style={{ display:'flex', gap:'12px', marginBottom:'16px', flexWrap:'wrap' }}>
-          <div style={{
-            flex:1, minWidth:'200px',
-            display:'flex', alignItems:'center', gap:'10px',
-            background:'rgba(255,255,255,0.05)',
-            border:'1px solid rgba(255,255,255,0.1)',
-            borderRadius:'12px', padding:'12px 16px'
-          }}>
-            <FaSearch style={{ color:'#6b7280', flexShrink:0 }} />
-            <input type="text" placeholder="Search notes..."
-              value={search} onChange={e => setSearch(e.target.value)}
-              style={{
-                background:'transparent', border:'none',
-                color:'#fff', outline:'none', width:'100%', fontSize:'14px'
-              }}
-            />
-            {search && (
-              <button onClick={() => setSearch('')}
-                style={{ background:'none', border:'none', color:'#6b7280', cursor:'pointer' }}>
-                <MdClose size={18} />
-              </button>
-            )}
-          </div>
+      {/* ── Filters ── */}
+      <section style={{ padding:'0 20px 32px', maxWidth:'1200px', margin:'0 auto' }}>
 
-          <div style={{ display:'flex', gap:'8px' }}>
-            {[
-              { key:'all',  label:'All'     },
-              { key:'free', label:'🆓 Free' },
-              { key:'paid', label:'💰 Paid' },
-            ].map(f => (
-              <motion.button key={f.key}
-                whileHover={{ scale:1.05 }} whileTap={{ scale:0.95 }}
-                onClick={() => setFilter(f.key)}
-                style={{
-                  padding:'10px 16px', borderRadius:'10px', cursor:'pointer',
-                  border:`1px solid ${filter===f.key ? '#f59e0b' : 'rgba(255,255,255,0.1)'}`,
-                  background: filter===f.key ? 'rgba(245,158,11,0.2)' : 'rgba(255,255,255,0.03)',
-                  color: filter===f.key ? '#fbbf24' : '#9ca3af',
-                  fontSize:'13px', fontWeight:500
-                }}>
-                {f.label}
-              </motion.button>
-            ))}
-          </div>
+        {/* Search bar */}
+        <div style={{
+          display:'flex', alignItems:'center', gap:'10px',
+          background:'rgba(255,255,255,0.05)',
+          border:'1px solid rgba(255,255,255,0.1)',
+          borderRadius:'12px', padding:'11px 16px',
+          marginBottom:'14px'
+        }}>
+          <FaSearch style={{ color:'#6b7280', flexShrink:0 }} />
+          <input type="text" placeholder="Search notes..."
+            value={search} onChange={e => setSearch(e.target.value)}
+            style={{
+              background:'transparent', border:'none',
+              color:'#fff', outline:'none', width:'100%', fontSize:'14px'
+            }}
+          />
+          {search && (
+            <button onClick={() => setSearch('')}
+              style={{ background:'none', border:'none', color:'#6b7280', cursor:'pointer' }}>
+              <MdClose size={18} />
+            </button>
+          )}
         </div>
 
-        <div style={{ display:'flex', gap:'8px', flexWrap:'wrap' }}>
+        {/* Free/Paid filter */}
+        <div style={{ display:'flex', gap:'8px', marginBottom:'14px', flexWrap:'wrap' }}>
+          {[
+            { key:'all',  label:'All'     },
+            { key:'free', label:'🆓 Free' },
+            { key:'paid', label:'💰 Paid' },
+          ].map(f => (
+            <motion.button key={f.key}
+              whileTap={{ scale:0.95 }}
+              onClick={() => setFilter(f.key)}
+              style={{
+                padding:'8px 16px', borderRadius:'10px', cursor:'pointer',
+                border:`1px solid ${filter===f.key ? '#f59e0b' : 'rgba(255,255,255,0.1)'}`,
+                background: filter===f.key ? 'rgba(245,158,11,0.2)' : 'rgba(255,255,255,0.03)',
+                color: filter===f.key ? '#fbbf24' : '#9ca3af',
+                fontSize:'13px', fontWeight:500
+              }}>
+              {f.label}
+            </motion.button>
+          ))}
+        </div>
+
+        {/* Course filter — scrollable row on mobile */}
+        <div style={{
+          display:'flex', gap:'8px',
+          overflowX:'auto', paddingBottom:'4px',
+          scrollbarWidth:'none'
+        }}>
           {COURSES.map(c => (
             <motion.button key={c}
-              whileHover={{ scale:1.05 }} whileTap={{ scale:0.95 }}
+              whileTap={{ scale:0.95 }}
               onClick={() => { setCourse(c); setPage(1); }}
               style={{
-                padding:'8px 16px', borderRadius:'100px', cursor:'pointer',
+                padding:'7px 16px', borderRadius:'100px', cursor:'pointer',
                 border:`1px solid ${course===c ? '#6366f1' : 'rgba(255,255,255,0.1)'}`,
                 background: course===c ? 'rgba(99,102,241,0.2)' : 'rgba(255,255,255,0.03)',
                 color: course===c ? '#a5b4fc' : '#9ca3af',
-                fontSize:'13px', fontWeight:500
+                fontSize:'13px', fontWeight:500,
+                whiteSpace:'nowrap', flexShrink:0
               }}>
               {c}
             </motion.button>
@@ -189,17 +203,18 @@ export default function NotesStore() {
         </div>
       </section>
 
-      {/* Notes Grid */}
-      <section style={{ padding:'0 24px 80px', maxWidth:'1200px', margin:'0 auto' }}>
+      {/* ── Notes Grid ── */}
+      <section style={{ padding:'0 20px 80px', maxWidth:'1200px', margin:'0 auto' }}>
         {loading ? (
           <div style={{
             display:'grid',
-            gridTemplateColumns:'repeat(auto-fit, minmax(280px, 1fr))',
-            gap:'20px'
+            gridTemplateColumns: isMobile ? 'repeat(2,1fr)' : 'repeat(auto-fit,minmax(260px,1fr))',
+            gap:'14px'
           }}>
             {[...Array(6)].map((_, i) => (
               <div key={i} style={{
-                height:'320px', borderRadius:'20px',
+                height: isMobile ? '200px' : '300px',
+                borderRadius:'16px',
                 background:'rgba(255,255,255,0.03)',
                 border:'1px solid rgba(255,255,255,0.08)'
               }} />
@@ -207,107 +222,119 @@ export default function NotesStore() {
           </div>
         ) : notes.length === 0 ? (
           <div style={{
-            textAlign:'center', padding:'80px',
+            textAlign:'center', padding:'60px 24px',
             background:'rgba(255,255,255,0.03)',
             border:'1px solid rgba(255,255,255,0.08)',
-            borderRadius:'24px'
+            borderRadius:'20px'
           }}>
-            <FaBook size={48} style={{ color:'#374151', marginBottom:'16px' }} />
-            <p style={{ color:'#6b7280', fontSize:'18px' }}>No notes found!</p>
+            <FaBook size={40} style={{ color:'#374151', marginBottom:'12px' }} />
+            <p style={{ color:'#6b7280', fontSize:'16px' }}>No notes found!</p>
           </div>
         ) : (
           <div style={{
             display:'grid',
-            gridTemplateColumns:'repeat(auto-fit, minmax(280px, 1fr))',
-            gap:'20px'
+            gridTemplateColumns: isMobile
+              ? 'repeat(2,1fr)'
+              : 'repeat(auto-fit,minmax(260px,1fr))',
+            gap: isMobile ? '12px' : '20px'
           }}>
             {notes.map((note, i) => (
               <motion.div key={note.id}
                 initial={{ opacity:0, y:20 }}
                 animate={{ opacity:1, y:0 }}
-                transition={{ delay:i*0.06 }}
-                whileHover={{ y:-6, boxShadow:'0 20px 40px rgba(99,102,241,0.15)' }}
+                transition={{ delay: i * 0.05 }}
+                whileHover={{ y:-4, boxShadow:'0 16px 36px rgba(99,102,241,0.15)' }}
+                onClick={() => setSelected(note)}
                 style={{
                   background:'rgba(255,255,255,0.03)',
                   border:'1px solid rgba(255,255,255,0.08)',
-                  borderRadius:'20px', overflow:'hidden',
-                  transition:'all 0.3s', cursor:'pointer'
+                  borderRadius:'16px', overflow:'hidden',
+                  cursor:'pointer', display:'flex', flexDirection:'column'
                 }}
-                onClick={() => setSelected(note)}
               >
                 {/* Thumbnail */}
                 <div style={{
-                  height:'160px',
-                  background:'linear-gradient(135deg,rgba(99,102,241,0.3),rgba(139,92,246,0.2))',
+                  height: isMobile ? '90px' : '140px',
+                  background:'linear-gradient(135deg,rgba(99,102,241,0.25),rgba(139,92,246,0.15))',
                   display:'flex', alignItems:'center',
-                  justifyContent:'center', position:'relative'
+                  justifyContent:'center', position:'relative', flexShrink:0
                 }}>
-                  <FaBook size={48} style={{ color:'rgba(99,102,241,0.8)' }} />
+                  <FaBook size={isMobile ? 28 : 44} style={{ color:'rgba(99,102,241,0.8)' }} />
+
+                  {/* Price badge */}
                   <div style={{
-                    position:'absolute', top:'12px', right:'12px',
-                    padding:'4px 12px', borderRadius:'100px',
+                    position:'absolute', top:'8px', right:'8px',
+                    padding:'3px 8px', borderRadius:'100px',
                     background: note.is_free ? 'rgba(16,185,129,0.9)' : 'rgba(245,158,11,0.9)',
-                    color:'#fff', fontSize:'12px', fontWeight:700,
-                    display:'flex', alignItems:'center', gap:'4px'
+                    color:'#fff', fontSize:'10px', fontWeight:700,
+                    display:'flex', alignItems:'center', gap:'3px'
                   }}>
                     {note.is_free
-                      ? <><FaUnlock size={10} /> FREE</>
-                      : <><FaLock size={10} /> ₹{note.price}</>
+                      ? <><FaUnlock size={8} /> FREE</>
+                      : <><FaLock size={8} /> ₹{note.price}</>
                     }
                   </div>
+
+                  {/* Course badge */}
                   <div style={{
-                    position:'absolute', top:'12px', left:'12px',
-                    padding:'4px 10px', borderRadius:'100px',
+                    position:'absolute', top:'8px', left:'8px',
+                    padding:'3px 8px', borderRadius:'100px',
                     background:'rgba(0,0,0,0.6)',
-                    color:'#fff', fontSize:'11px', fontWeight:600
+                    color:'#fff', fontSize:'10px', fontWeight:600
                   }}>
                     {note.course}
                   </div>
                 </div>
 
                 {/* Content */}
-                <div style={{ padding:'20px' }}>
+                <div style={{ padding: isMobile ? '10px' : '16px', flex:1, display:'flex', flexDirection:'column' }}>
                   <h3 style={{
-                    color:'#fff', fontWeight:700, fontSize:'15px',
-                    marginBottom:'8px', lineHeight:1.4
+                    color:'#fff', fontWeight:700,
+                    fontSize: isMobile ? '12px' : '14px',
+                    marginBottom:'4px', lineHeight:1.35,
+                    display:'-webkit-box', WebkitLineClamp:2,
+                    WebkitBoxOrient:'vertical', overflow:'hidden'
                   }}>
                     {note.title}
                   </h3>
-                  <p style={{ color:'#6b7280', fontSize:'13px', marginBottom:'12px' }}>
+                  <p style={{ color:'#6b7280', fontSize: isMobile ? '10px' : '12px', marginBottom:'10px' }}>
                     {note.subject} • Sem {note.semester}
                   </p>
 
-                  <div style={{ display:'flex', gap:'16px', marginBottom:'16px' }}>
-                    <span style={{ display:'flex', alignItems:'center', gap:'4px', color:'#f59e0b', fontSize:'13px' }}>
-                      <FaStar size={12} /> {note.rating || '4.5'}
+                  <div style={{ display:'flex', gap:'10px', marginBottom:'10px' }}>
+                    <span style={{ display:'flex', alignItems:'center', gap:'3px', color:'#f59e0b', fontSize:'11px' }}>
+                      <FaStar size={10} /> {note.rating || '4.5'}
                     </span>
-                    <span style={{ color:'#6b7280', fontSize:'13px' }}>
+                    <span style={{ color:'#6b7280', fontSize:'11px' }}>
                       📥 {note.downloads || 0}
                     </span>
                   </div>
 
                   <motion.button
-                    whileHover={{ scale:1.03 }}
-                    whileTap={{ scale:0.97 }}
+                    whileTap={{ scale:0.96 }}
                     onClick={e => { e.stopPropagation(); handleDownload(note); }}
                     disabled={downloading === note.id || paymentLoading}
                     style={{
-                      width:'100%', padding:'11px',
+                      width:'100%',
+                      padding: isMobile ? '8px 6px' : '10px',
                       background: note.is_free
                         ? 'linear-gradient(135deg,#10b981,#059669)'
                         : 'linear-gradient(135deg,#f59e0b,#d97706)',
-                      color:'#fff', border:'none', borderRadius:'10px',
-                      cursor:'pointer', fontSize:'14px', fontWeight:600,
+                      color:'#fff', border:'none', borderRadius:'8px',
+                      cursor:'pointer',
+                      fontSize: isMobile ? '11px' : '13px',
+                      fontWeight:600,
                       display:'flex', alignItems:'center',
-                      justifyContent:'center', gap:'8px',
-                      opacity: (downloading===note.id || paymentLoading) ? 0.7 : 1
+                      justifyContent:'center', gap:'5px',
+                      opacity: (downloading===note.id || paymentLoading) ? 0.7 : 1,
+                      marginTop:'auto'
                     }}
                   >
                     {downloading === note.id ? 'Downloading...' :
                      paymentLoading ? 'Processing...' :
                      note.is_free
-                       ? <><FaDownload size={14} /> Download Free</>
-                       : <><FaLock size={14} /> Buy ₹{note.price}</>
+                       ? <><FaDownload size={11} /> Download Free</>
+                       : <><FaLock size={11} /> Buy ₹{note.price}</>
                     }
                   </motion.button>
                 </div>
@@ -318,18 +345,18 @@ export default function NotesStore() {
 
         {/* Pagination */}
         {total > 12 && (
-          <div style={{ display:'flex', justifyContent:'center', gap:'12px', marginTop:'40px' }}>
+          <div style={{ display:'flex', justifyContent:'center', gap:'12px', marginTop:'36px' }}>
             <button onClick={() => setPage(p => Math.max(1,p-1))} disabled={page===1}
               style={{
-                padding:'10px 24px', borderRadius:'10px', cursor:'pointer',
+                padding:'10px 22px', borderRadius:'10px', cursor:'pointer',
                 background:'rgba(255,255,255,0.05)',
                 border:'1px solid rgba(255,255,255,0.1)',
                 color:'#fff', opacity:page===1?0.4:1
-              }}>← Previous</button>
-            <span style={{ padding:'10px 20px', color:'#9ca3af' }}>Page {page}</span>
+              }}>← Prev</button>
+            <span style={{ padding:'10px 16px', color:'#9ca3af' }}>Page {page}</span>
             <button onClick={() => setPage(p=>p+1)} disabled={notes.length<12}
               style={{
-                padding:'10px 24px', borderRadius:'10px', cursor:'pointer',
+                padding:'10px 22px', borderRadius:'10px', cursor:'pointer',
                 background:'rgba(255,255,255,0.05)',
                 border:'1px solid rgba(255,255,255,0.1)',
                 color:'#fff', opacity:notes.length<12?0.4:1
@@ -338,35 +365,35 @@ export default function NotesStore() {
         )}
       </section>
 
-      {/* Note Detail Modal */}
+      {/* ── Note Detail Modal ── */}
       <AnimatePresence>
         {selected && (
           <motion.div
             initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }}
             onClick={() => setSelected(null)}
             style={{
-              position:'fixed', inset:0, background:'rgba(0,0,0,0.8)',
+              position:'fixed', inset:0, background:'rgba(0,0,0,0.85)',
               zIndex:9999, display:'flex', alignItems:'center',
-              justifyContent:'center', padding:'24px'
+              justifyContent:'center', padding:'20px'
             }}
           >
             <motion.div
-              initial={{ scale:0.9 }} animate={{ scale:1 }} exit={{ scale:0.9 }}
+              initial={{ scale:0.9, y:20 }} animate={{ scale:1, y:0 }} exit={{ scale:0.9 }}
               onClick={e => e.stopPropagation()}
               style={{
                 background:'#1a1a2e',
                 border:'1px solid rgba(99,102,241,0.3)',
-                borderRadius:'24px', padding:'32px',
-                maxWidth:'480px', width:'100%'
+                borderRadius:'20px', padding: isMobile ? '24px 20px' : '32px',
+                maxWidth:'440px', width:'100%'
               }}
             >
-              <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'20px' }}>
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'18px' }}>
                 <div style={{
-                  width:'56px', height:'56px', borderRadius:'16px',
+                  width:'48px', height:'48px', borderRadius:'14px',
                   background:'rgba(99,102,241,0.2)',
                   display:'flex', alignItems:'center', justifyContent:'center'
                 }}>
-                  <FaBook size={24} style={{ color:'#6366f1' }} />
+                  <FaBook size={22} style={{ color:'#6366f1' }} />
                 </div>
                 <button onClick={() => setSelected(null)}
                   style={{
@@ -375,30 +402,30 @@ export default function NotesStore() {
                     borderRadius:'8px', padding:'6px 10px',
                     color:'#9ca3af', cursor:'pointer'
                   }}>
-                  <MdClose size={20} />
+                  <MdClose size={18} />
                 </button>
               </div>
 
-              <h2 style={{ color:'#fff', fontWeight:700, fontSize:'20px', marginBottom:'8px' }}>
+              <h2 style={{ color:'#fff', fontWeight:700, fontSize:'18px', marginBottom:'6px', lineHeight:1.3 }}>
                 {selected.title}
               </h2>
-              <p style={{ color:'#6b7280', fontSize:'14px', marginBottom:'20px' }}>
+              <p style={{ color:'#6b7280', fontSize:'13px', marginBottom:'18px' }}>
                 {selected.subject} • {selected.course} • Sem {selected.semester}
               </p>
 
               <div style={{
                 display:'flex', alignItems:'center', justifyContent:'space-between',
-                marginBottom:'24px'
+                marginBottom:'20px'
               }}>
                 <p style={{
-                  fontSize:'32px', fontWeight:900,
-                  color: selected.is_free ? '#10b981' : '#f59e0b'
+                  fontSize:'28px', fontWeight:900,
+                  color: selected.is_free ? '#10b981' : '#f59e0b', margin:0
                 }}>
                   {selected.is_free ? 'FREE' : `₹${selected.price}`}
                 </p>
-                <div style={{ display:'flex', gap:'4px' }}>
+                <div style={{ display:'flex', gap:'3px' }}>
                   {[1,2,3,4,5].map(j => (
-                    <FaStar key={j} size={16}
+                    <FaStar key={j} size={14}
                       style={{ color: j<=4 ? '#f59e0b' : '#374151' }} />
                   ))}
                 </div>
@@ -409,12 +436,12 @@ export default function NotesStore() {
                 onClick={() => { setSelected(null); handleDownload(selected); }}
                 disabled={paymentLoading}
                 style={{
-                  width:'100%', padding:'14px',
+                  width:'100%', padding:'13px',
                   background: selected.is_free
                     ? 'linear-gradient(135deg,#10b981,#059669)'
                     : 'linear-gradient(135deg,#f59e0b,#d97706)',
                   color:'#fff', border:'none', borderRadius:'12px',
-                  cursor:'pointer', fontSize:'16px', fontWeight:600,
+                  cursor:'pointer', fontSize:'15px', fontWeight:600,
                   display:'flex', alignItems:'center',
                   justifyContent:'center', gap:'8px'
                 }}
@@ -426,7 +453,7 @@ export default function NotesStore() {
               </motion.button>
 
               {!user && (
-                <p style={{ color:'#6b7280', fontSize:'13px', textAlign:'center', marginTop:'12px' }}>
+                <p style={{ color:'#6b7280', fontSize:'13px', textAlign:'center', marginTop:'10px' }}>
                   Please <a href="/login" style={{ color:'#6366f1' }}>login</a> to download
                 </p>
               )}
@@ -435,18 +462,18 @@ export default function NotesStore() {
         )}
       </AnimatePresence>
 
-      {/* CTA */}
-      <section style={{ padding:'0 24px 80px', maxWidth:'700px', margin:'0 auto' }}>
+      {/* ── CTA ── */}
+      <section style={{ padding:'0 20px 80px', maxWidth:'700px', margin:'0 auto' }}>
         <div style={{
           textAlign:'center',
-          background:'linear-gradient(135deg,rgba(245,158,11,0.15),rgba(99,102,241,0.1))',
-          border:'1px solid rgba(245,158,11,0.3)',
-          borderRadius:'24px', padding:'40px 32px'
+          background:'linear-gradient(135deg,rgba(245,158,11,0.12),rgba(99,102,241,0.08))',
+          border:'1px solid rgba(245,158,11,0.25)',
+          borderRadius:'20px', padding: isMobile ? '32px 20px' : '40px 32px'
         }}>
-          <h2 style={{ color:'#fff', fontWeight:800, fontSize:'24px', marginBottom:'12px' }}>
+          <h2 style={{ color:'#fff', fontWeight:800, fontSize: isMobile ? '20px' : '24px', marginBottom:'10px' }}>
             Need Custom Notes? 📚
           </h2>
-          <p style={{ color:'#9ca3af', fontSize:'15px', marginBottom:'24px' }}>
+          <p style={{ color:'#9ca3af', fontSize: isMobile ? '13px' : '15px', marginBottom:'20px' }}>
             Contact us for specific subject notes!
           </p>
           <a href="https://wa.me/917020521466?text=Hi! I need notes for..."
@@ -464,6 +491,7 @@ export default function NotesStore() {
           </a>
         </div>
       </section>
+
     </Layout>
   );
 }
