@@ -1,12 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
 import AdminSidebar from './AdminSidebar';
 import AdminNavbar  from './AdminNavbar';
 import { useAuth }  from '../../context/AuthContext';
 
 export default function AdminLayout() {
-  const [isOpen, setIsOpen] = useState(false);
-  const { user, loading }   = useAuth();
+  const [isOpen,   setIsOpen]   = useState(false);
+  const [winW,     setWinW]     = useState(window.innerWidth);
+  const { user, loading }       = useAuth();
+
+  useEffect(() => {
+    const onResize = () => setWinW(window.innerWidth);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  const isMobile = winW < 1024;
 
   if (loading) {
     return (
@@ -24,8 +33,6 @@ export default function AdminLayout() {
     return <Navigate to="/admin/login" replace />;
   }
 
-  const isMobile = window.innerWidth < 1024;
-
   return (
     <div style={{
       display: 'flex', height: '100vh', width: '100%',
@@ -35,17 +42,15 @@ export default function AdminLayout() {
 
       {/* Mobile Overlay */}
       {isOpen && isMobile && (
-        <div
-          onClick={() => setIsOpen(false)}
+        <div onClick={() => setIsOpen(false)}
           style={{
             position: 'fixed', inset: 0,
-            background: 'rgba(0,0,0,0.7)',
-            zIndex: 40
+            background: 'rgba(0,0,0,0.7)', zIndex: 40
           }}
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar — always visible on desktop */}
       <div style={{
         position: isMobile ? 'fixed' : 'relative',
         left: isMobile ? (isOpen ? '0' : '-280px') : '0',
@@ -62,8 +67,7 @@ export default function AdminLayout() {
       <div style={{
         flex: '1 1 0%', display: 'flex',
         flexDirection: 'column', overflow: 'hidden',
-        height: '100vh', width: isMobile ? '100%' : '0',
-        marginLeft: isMobile ? '0' : '0'
+        height: '100vh'
       }}>
         <AdminNavbar setIsOpen={setIsOpen} />
         <main style={{
