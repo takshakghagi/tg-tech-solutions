@@ -19,6 +19,7 @@ const adminRoutes         = require('./src/routes/adminRoutes');
 const notificationRoutes  = require('./src/routes/notificationRoutes');
 const reviewRoutes        = require('./src/routes/reviewRoutes');
 const paymentRoutes = require('./src/routes/paymentRoutes');
+const portfolioRoutes = require('./src/routes/portfolioRoutes');
 
 const app = express();
 
@@ -87,6 +88,7 @@ app.use(`${API}/admin`,         adminRoutes);
 app.use(`${API}/notifications`, notificationRoutes);
 app.use(`${API}/reviews`,       reviewRoutes);
 app.use('/api/v1/payments', paymentRoutes);
+app.use(`${API}/portfolio`, portfolioRoutes);
 
 
 app.use('/uploads', express.static('uploads'));

@@ -13,6 +13,7 @@ import AdminServices      from './admin/pages/AdminServices';
 import AdminReviews       from './admin/pages/AdminReviews';
 import AdminRevenue       from './admin/pages/AdminRevenue';
 import AdminNotifications from './admin/pages/AdminNotifications';
+import AdminPortfolio     from './admin/pages/AdminPortfolio';
 
 // User Auth
 import Login    from './pages/Login';
@@ -74,6 +75,7 @@ export default function App() {
           <Route path="/reviews"   element={<Reviews />} />
           <Route path="/order"     element={<Order />} />
           <Route path="/write-review" element={<WriteReview />} />
+          <Route path="portfolio" element={<AdminPortfolio />} />
           
 
           {/* Auth Pages */}
