@@ -28,18 +28,18 @@ import UserProfile       from './pages/dashboard/UserProfile';
 import UserNotifications from './pages/dashboard/UserNotifications';
 import UserSettings      from './pages/dashboard/UserSettings';
 
-// main page
-import Home       from './pages/Home';
-import Services   from './pages/Services';
-import About      from './pages/About';
-import Contact    from './pages/Contact';
-import Portfolio  from './pages/Portfolio';
-import Blog       from './pages/Blog';
-import NotesStore from './pages/NotesStore';
-import Reviews    from './pages/Reviews';  // ← YE ADD KARO
-import Order      from './pages/Order';
+// Main Pages
+import Home        from './pages/Home';
+import Services    from './pages/Services';
+import About       from './pages/About';
+import Contact     from './pages/Contact';
+import Portfolio   from './pages/Portfolio';
+import Blog        from './pages/Blog';
+import NotesStore  from './pages/NotesStore';
+import Reviews     from './pages/Reviews';
+import Order       from './pages/Order';
 import WriteReview from './pages/WriteReview';
-import BlogDetail from './pages/BlogDetail';
+import BlogDetail  from './pages/BlogDetail';
 
 export default function App() {
   return (
@@ -47,36 +47,32 @@ export default function App() {
       <BrowserRouter>
         <Toaster
           position="top-center"
-          containerStyle={{
-          top: 20,
-          zIndex: 99999
-         }}
+          containerStyle={{ top: 20, zIndex: 99999 }}
           toastOptions={{
-          duration: 4000,
-          style: {
-          background: '#1a1a2e',
-          color: '#fff',
-          border: '1px solid rgba(239,68,68,0.5)',
-          fontSize: '14px',
-          zIndex: 99999
-        },
+            duration: 4000,
+            style: {
+              background: '#1a1a2e',
+              color: '#fff',
+              border: '1px solid rgba(239,68,68,0.5)',
+              fontSize: '14px',
+              zIndex: 99999
+            },
           }}
         />
         <Routes>
-          {/* Redirect root */}
-          <Route path="/"          element={<Home />} />
-          <Route path="/services"  element={<Services />} />
-          <Route path="/about"     element={<About />} />
-          <Route path="/contact"   element={<Contact />} />
-          <Route path="/portfolio" element={<Portfolio />} />
-          <Route path="/blog"      element={<Blog />} />
-          <Route path="/blog/:slug" element={<BlogDetail />} /> 
-          <Route path="/notes"     element={<NotesStore />} />
-          <Route path="/reviews"   element={<Reviews />} />
-          <Route path="/order"     element={<Order />} />
+
+          {/* Public Pages */}
+          <Route path="/"            element={<Home />} />
+          <Route path="/services"    element={<Services />} />
+          <Route path="/about"       element={<About />} />
+          <Route path="/contact"     element={<Contact />} />
+          <Route path="/portfolio"   element={<Portfolio />} />
+          <Route path="/blog"        element={<Blog />} />
+          <Route path="/blog/:slug"  element={<BlogDetail />} />
+          <Route path="/notes"       element={<NotesStore />} />
+          <Route path="/reviews"     element={<Reviews />} />
+          <Route path="/order"       element={<Order />} />
           <Route path="/write-review" element={<WriteReview />} />
-          <Route path="portfolio" element={<AdminPortfolio />} />
-          
 
           {/* Auth Pages */}
           <Route path="/login"    element={<Login />} />
@@ -84,12 +80,12 @@ export default function App() {
 
           {/* User Dashboard */}
           <Route path="/dashboard" element={<UserLayout />}>
-            <Route index                  element={<UserDashboard />} />
-            <Route path="orders"          element={<UserOrders />} />
-            <Route path="downloads"       element={<UserDownloads />} />
-            <Route path="profile"         element={<UserProfile />} />
-            <Route path="notifications"   element={<UserNotifications />} />
-            <Route path="settings"        element={<UserSettings />} />
+            <Route index                element={<UserDashboard />} />
+            <Route path="orders"        element={<UserOrders />} />
+            <Route path="downloads"     element={<UserDownloads />} />
+            <Route path="profile"       element={<UserProfile />} />
+            <Route path="notifications" element={<UserNotifications />} />
+            <Route path="settings"      element={<UserSettings />} />
           </Route>
 
           {/* Admin Login */}
@@ -106,6 +102,7 @@ export default function App() {
             <Route path="reviews"       element={<AdminReviews />} />
             <Route path="revenue"       element={<AdminRevenue />} />
             <Route path="notifications" element={<AdminNotifications />} />
+            <Route path="portfolio"     element={<AdminPortfolio />} />
           </Route>
 
           {/* 404 */}
@@ -117,6 +114,7 @@ export default function App() {
               </div>
             </div>
           } />
+
         </Routes>
       </BrowserRouter>
     </AuthProvider>
