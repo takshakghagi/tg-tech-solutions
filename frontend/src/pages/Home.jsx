@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { motion, useInView, useAnimation } from 'framer-motion';
 import {
   FaCode, FaMobileAlt, FaGraduationCap, FaBook,
-  FaFileAlt, FaPaintBrush, FaIdCard, FaLaptopCode,
-  FaStar, FaWhatsapp, FaArrowRight,
+  FaFileAlt, FaPaintBrush, FaIdCard, FaBriefcase,
+  FaLaptopCode, FaStar, FaWhatsapp, FaArrowRight,
   FaCheckCircle, FaRocket, FaShieldAlt, FaClock
 } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
@@ -58,14 +58,14 @@ function FadeIn({ children, delay = 0, direction = 'up' }) {
 }
 
 const services = [
-  { icon: FaCode,          title: 'Web Development',       desc: 'Modern responsive websites with React, Node.js',        color: '#6366f1', bg: 'rgba(99,102,241,0.1)'  },
-  { icon: FaMobileAlt,     title: 'App Development',       desc: 'Cross-platform mobile apps for Android & iOS',          color: '#8b5cf6', bg: 'rgba(139,92,246,0.1)'  },
-  { icon: FaGraduationCap, title: 'Final Year Project',    desc: 'Complete MCA, BCA, B.Tech projects with documentation', color: '#10b981', bg: 'rgba(16,185,129,0.1)'  },
-  { icon: FaBook,          title: 'Notes & Study Material',desc: 'Semester-wise notes for MCA, BCA, B.Tech',             color: '#f59e0b', bg: 'rgba(245,158,11,0.1)'  },
-  { icon: FaFileAlt,       title: 'Documentation',         desc: 'SRS, DFD, ER Diagram, Project Reports',                color: '#ef4444', bg: 'rgba(239,68,68,0.1)'   },
-  { icon: FaPaintBrush,    title: 'Graphic Design',        desc: 'Logo, Banner, Brand Identity Design',                   color: '#ec4899', bg: 'rgba(236,72,153,0.1)'  },
-  { icon: FaIdCard,        title: 'Resume & Portfolio',    desc: 'ATS-friendly resume & portfolio website',               color: '#06b6d4', bg: 'rgba(6,182,212,0.1)'   },
-  { icon: FaLaptopCode,    title: 'Software Development',  desc: 'Custom software solutions for businesses',              color: '#84cc16', bg: 'rgba(132,204,22,0.1)'  },
+  { icon: FaCode,         title: 'Web Development',      desc: 'Modern responsive websites with React, Node.js',        color: '#6366f1', bg: 'rgba(99,102,241,0.1)'  },
+  { icon: FaMobileAlt,    title: 'App Development',      desc: 'Cross-platform mobile apps for Android & iOS',          color: '#8b5cf6', bg: 'rgba(139,92,246,0.1)'  },
+  { icon: FaGraduationCap,title: 'Final Year Project',   desc: 'Complete MCA, BCA, B.Tech projects with documentation', color: '#10b981', bg: 'rgba(16,185,129,0.1)'  },
+  { icon: FaBook,         title: 'Notes & Study Material',desc: 'Semester-wise notes for MCA, BCA, B.Tech',            color: '#f59e0b', bg: 'rgba(245,158,11,0.1)'  },
+  { icon: FaFileAlt,      title: 'Documentation',        desc: 'SRS, DFD, ER Diagram, Project Reports',                color: '#ef4444', bg: 'rgba(239,68,68,0.1)'   },
+  { icon: FaPaintBrush,   title: 'Graphic Design',       desc: 'Logo, Banner, Brand Identity Design',                   color: '#ec4899', bg: 'rgba(236,72,153,0.1)'  },
+  { icon: FaIdCard,       title: 'Resume & Portfolio',   desc: 'ATS-friendly resume & portfolio website',               color: '#06b6d4', bg: 'rgba(6,182,212,0.1)'   },
+  { icon: FaLaptopCode,   title: 'Software Development', desc: 'Custom software solutions for businesses',              color: '#84cc16', bg: 'rgba(132,204,22,0.1)'  },
 ];
 
 const whyUs = [
@@ -102,7 +102,7 @@ export default function Home() {
         display: 'flex', alignItems: 'center',
         position: 'relative', overflow: 'hidden',
         background: 'radial-gradient(ellipse at 60% 50%, rgba(99,102,241,0.15) 0%, transparent 60%)',
-        padding: isMobile ? '90px 0 50px' : '0'
+        padding: isMobile ? '80px 0 40px' : '0'
       }}>
         {/* Particles */}
         <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
@@ -127,7 +127,7 @@ export default function Home() {
               top: '-100px', right: '-100px', borderRadius: '50%' }} />
         </div>
 
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: isMobile ? '0 20px' : '0 24px', width: '100%' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: isMobile ? '0 16px' : '0 24px', width: '100%' }}>
           <div style={{
             display: 'grid',
             gridTemplateColumns: isTablet ? '1fr' : '1fr 1fr',
@@ -159,9 +159,9 @@ export default function Home() {
                 <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
                   style={{
-                    fontSize: isMobile ? '32px' : 'clamp(36px,5vw,64px)',
-                    fontWeight: 800, lineHeight: 1.2,
-                    marginBottom: '16px', color: '#fff'
+                    fontSize: isMobile ? '36px' : 'clamp(36px,5vw,64px)',
+                    fontWeight: 800, lineHeight: 1.15,
+                    marginBottom: '20px', color: '#fff'
                   }}>
                   Transform Your{' '}
                   <span style={{
@@ -178,8 +178,8 @@ export default function Home() {
                   transition={{ delay: 0.4 }}
                   style={{
                     color: '#9ca3af',
-                    fontSize: isMobile ? '14px' : '18px',
-                    lineHeight: 1.7, marginBottom: '24px'
+                    fontSize: isMobile ? '15px' : '18px',
+                    lineHeight: 1.7, marginBottom: '28px'
                   }}>
                   Expert web development, mobile apps, final year projects, IT notes & more.
                   Quality work at student-friendly prices!
@@ -190,25 +190,26 @@ export default function Home() {
                   transition={{ delay: 0.5 }}
                   style={{
                     display: 'flex', gap: '12px',
-                    flexDirection: 'column',
+                    flexDirection: isMobile ? 'column' : 'row',
+                    flexWrap: 'wrap'
                   }}>
-                  <Link to="/services" style={{ textDecoration: 'none', width: '100%' }}>
-                    <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+                  <Link to="/services" style={{ textDecoration: 'none' }}>
+                    <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                       style={{
                         padding: '14px 28px', borderRadius: '12px',
                         background: 'linear-gradient(135deg,#6366f1,#8b5cf6)',
                         color: '#fff', border: 'none', cursor: 'pointer',
                         fontSize: '16px', fontWeight: 600,
                         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                        width: '100%',
+                        width: isMobile ? '100%' : 'auto',
                         boxShadow: '0 8px 30px rgba(99,102,241,0.3)'
                       }}>
                       Explore Services <FaArrowRight />
                     </motion.button>
                   </Link>
                   <a href="https://wa.me/917020521466" target="_blank" rel="noreferrer"
-                    style={{ textDecoration: 'none', width: '100%' }}>
-                    <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+                    style={{ textDecoration: 'none', width: isMobile ? '100%' : 'auto' }}>
+                    <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                       style={{
                         padding: '14px 28px', borderRadius: '12px',
                         background: 'rgba(37,211,102,0.1)',
@@ -227,29 +228,23 @@ export default function Home() {
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                   transition={{ delay: 0.7 }}
                   style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(4, 1fr)',
-                    gap: '8px',
-                    marginTop: '28px',
-                    padding: '16px',
-                    background: 'rgba(255,255,255,0.03)',
-                    borderRadius: '14px',
-                    border: '1px solid rgba(255,255,255,0.06)'
+                    display: 'flex', gap: isMobile ? '16px' : '24px',
+                    marginTop: '32px', flexWrap: 'wrap'
                   }}>
                   {[
-                    { value: '500+', label: 'Projects'  },
-                    { value: '200+', label: 'Clients'   },
-                    { value: '4.9⭐', label: 'Rating'   },
+                    { value: '500+', label: 'Projects'   },
+                    { value: '200+', label: 'Clients'    },
+                    { value: '4.9⭐', label: 'Rating'    },
                     { value: '3+',   label: 'Yrs Exp'   },
                   ].map((item, i) => (
                     <div key={i} style={{ textAlign: 'center' }}>
                       <p style={{
-                        fontSize: isMobile ? '16px' : '22px', fontWeight: 800,
+                        fontSize: isMobile ? '20px' : '24px', fontWeight: 800,
                         background: 'linear-gradient(135deg,#6366f1,#a855f7)',
                         WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
                         margin: 0
                       }}>{item.value}</p>
-                      <p style={{ color: '#6b7280', fontSize: '10px', margin: '2px 0 0' }}>{item.label}</p>
+                      <p style={{ color: '#6b7280', fontSize: '11px', margin: 0 }}>{item.label}</p>
                     </div>
                   ))}
                 </motion.div>
@@ -374,70 +369,58 @@ export default function Home() {
       </section>
 
       {/* ===== SERVICES ===== */}
-      <section style={{ padding: isMobile ? '60px 20px' : '100px 24px', maxWidth: '1200px', margin: '0 auto' }}>
+      <section style={{ padding: isMobile ? '60px 16px' : '100px 24px', maxWidth: '1200px', margin: '0 auto' }}>
         <FadeIn>
-          <div style={{ textAlign: 'center', marginBottom: isMobile ? '36px' : '60px' }}>
+          <div style={{ textAlign: 'center', marginBottom: isMobile ? '40px' : '60px' }}>
             <span style={{
               display: 'inline-block', padding: '6px 20px', borderRadius: '100px',
               background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.3)',
               color: '#a5b4fc', fontSize: '13px', marginBottom: '16px'
             }}>Our Services</span>
-            <h2 style={{ fontSize: 'clamp(24px,4vw,48px)', fontWeight: 800, color: '#fff', marginBottom: '10px' }}>
+            <h2 style={{ fontSize: 'clamp(24px,4vw,48px)', fontWeight: 800, color: '#fff', marginBottom: '12px' }}>
               What We <span style={{
                 background: 'linear-gradient(135deg,#6366f1,#a855f7)',
                 WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
               }}>Offer</span>
             </h2>
-            <p style={{ color: '#9ca3af', fontSize: isMobile ? '14px' : '17px' }}>
+            <p style={{ color: '#9ca3af', fontSize: isMobile ? '14px' : '18px' }}>
               Complete IT solutions for students and businesses
             </p>
           </div>
         </FadeIn>
 
-        {/* Services Grid — 1 col on mobile, 2 on tablet, 4 on desktop */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: isMobile
-            ? '1fr'
-            : isTablet
-              ? 'repeat(2, 1fr)'
-              : 'repeat(4, 1fr)',
-          gap: isMobile ? '14px' : '20px'
+          gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(auto-fit, minmax(260px, 1fr))',
+          gap: isMobile ? '12px' : '20px'
         }}>
           {services.map((service, i) => (
-            <FadeIn key={i} delay={i * 0.07}>
+            <FadeIn key={i} delay={i * 0.08}>
               <motion.div whileHover={{ scale: 1.03, borderColor: service.color }}
                 style={{
                   background: 'rgba(255,255,255,0.03)',
                   border: '1px solid rgba(255,255,255,0.08)',
                   borderRadius: '16px',
-                  padding: isMobile ? '18px' : '24px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  flexDirection: isMobile ? 'row' : 'column',
-                  alignItems: isMobile ? 'center' : 'flex-start',
-                  gap: isMobile ? '14px' : '0'
+                  padding: isMobile ? '16px' : '28px',
+                  cursor: 'pointer', height: '100%'
                 }}>
                 <div style={{
-                  width: isMobile ? '44px' : '52px',
-                  height: isMobile ? '44px' : '52px',
-                  flexShrink: 0,
+                  width: isMobile ? '40px' : '56px',
+                  height: isMobile ? '40px' : '56px',
                   borderRadius: '12px', background: service.bg,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  marginBottom: isMobile ? '0' : '16px'
+                  marginBottom: isMobile ? '12px' : '20px'
                 }}>
-                  <service.icon size={isMobile ? 20 : 24} style={{ color: service.color }} />
+                  <service.icon size={isMobile ? 18 : 26} style={{ color: service.color }} />
                 </div>
-                <div>
-                  <h3 style={{
-                    color: '#fff', fontWeight: 700,
-                    fontSize: isMobile ? '14px' : '16px',
-                    marginBottom: isMobile ? '0' : '6px', lineHeight: 1.3
-                  }}>{service.title}</h3>
-                  {!isMobile && (
-                    <p style={{ color: '#9ca3af', fontSize: '13px', lineHeight: 1.6, margin: 0 }}>{service.desc}</p>
-                  )}
-                </div>
+                <h3 style={{
+                  color: '#fff', fontWeight: 700,
+                  fontSize: isMobile ? '13px' : '18px',
+                  marginBottom: '8px', lineHeight: 1.3
+                }}>{service.title}</h3>
+                {!isMobile && (
+                  <p style={{ color: '#9ca3af', fontSize: '14px', lineHeight: 1.6 }}>{service.desc}</p>
+                )}
               </motion.div>
             </FadeIn>
           ))}
@@ -462,7 +445,7 @@ export default function Home() {
 
       {/* ===== STATS ===== */}
       <section style={{
-        padding: isMobile ? '50px 20px' : '80px 24px',
+        padding: isMobile ? '50px 16px' : '80px 24px',
         background: 'linear-gradient(135deg,rgba(99,102,241,0.1),rgba(139,92,246,0.05))',
         borderTop: '1px solid rgba(99,102,241,0.1)',
         borderBottom: '1px solid rgba(99,102,241,0.1)'
@@ -470,33 +453,28 @@ export default function Home() {
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
           <div style={{
             display: 'grid',
-            gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
-            gap: isMobile ? '20px 12px' : '40px',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: isMobile ? '24px' : '40px',
             textAlign: 'center'
           }}>
             {[
-              { end: 150, suffix: '+', label: 'Projects Completed',  color: '#6366f1' },
-              { end: 59,  suffix: '+', label: 'Happy Clients',       color: '#10b981' },
-              { end: 0,   suffix: '+', label: 'Years Experience',    color: '#f59e0b' },
-              { end: 29,  suffix: '%', label: 'Client Satisfaction', color: '#ec4899' },
+              { end: 500, suffix: '+', label: 'Projects Completed',  color: '#6366f1' },
+              { end: 200, suffix: '+', label: 'Happy Clients',       color: '#10b981' },
+              { end: 3,   suffix: '+', label: 'Years Experience',    color: '#f59e0b' },
+              { end: 99,  suffix: '%', label: 'Client Satisfaction', color: '#ec4899' },
             ].map((stat, i) => (
               <FadeIn key={i} delay={i * 0.1}>
-                <div style={{
-                  padding: isMobile ? '16px 8px' : '0',
-                  background: isMobile ? 'rgba(255,255,255,0.03)' : 'transparent',
-                  borderRadius: isMobile ? '12px' : '0',
-                  border: isMobile ? '1px solid rgba(255,255,255,0.06)' : 'none'
-                }}>
+                <div>
                   <p style={{
-                    fontSize: isMobile ? '32px' : 'clamp(36px,5vw,52px)',
+                    fontSize: isMobile ? '36px' : 'clamp(36px,5vw,56px)',
                     fontWeight: 900,
                     background: `linear-gradient(135deg,${stat.color},#fff)`,
                     WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-                    marginBottom: '6px', margin: 0
+                    marginBottom: '8px'
                   }}>
                     <Counter end={stat.end} suffix={stat.suffix} />
                   </p>
-                  <p style={{ color: '#9ca3af', fontSize: isMobile ? '12px' : '14px', marginTop: '6px' }}>{stat.label}</p>
+                  <p style={{ color: '#9ca3af', fontSize: isMobile ? '13px' : '15px' }}>{stat.label}</p>
                 </div>
               </FadeIn>
             ))}
@@ -505,15 +483,15 @@ export default function Home() {
       </section>
 
       {/* ===== WHY CHOOSE US ===== */}
-      <section style={{ padding: isMobile ? '60px 20px' : '100px 24px', maxWidth: '1200px', margin: '0 auto' }}>
+      <section style={{ padding: isMobile ? '60px 16px' : '100px 24px', maxWidth: '1200px', margin: '0 auto' }}>
         <FadeIn>
-          <div style={{ textAlign: 'center', marginBottom: isMobile ? '36px' : '60px' }}>
+          <div style={{ textAlign: 'center', marginBottom: isMobile ? '40px' : '60px' }}>
             <span style={{
               display: 'inline-block', padding: '6px 20px', borderRadius: '100px',
               background: 'rgba(16,185,129,0.15)', border: '1px solid rgba(16,185,129,0.3)',
               color: '#34d399', fontSize: '13px', marginBottom: '16px'
             }}>Why Choose Us</span>
-            <h2 style={{ fontSize: 'clamp(22px,4vw,48px)', fontWeight: 800, color: '#fff' }}>
+            <h2 style={{ fontSize: 'clamp(24px,4vw,48px)', fontWeight: 800, color: '#fff' }}>
               Why Students &{' '}
               <span style={{
                 background: 'linear-gradient(135deg,#10b981,#34d399)',
@@ -525,8 +503,8 @@ export default function Home() {
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
-          gap: isMobile ? '14px' : '24px'
+          gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(auto-fit, minmax(250px, 1fr))',
+          gap: isMobile ? '12px' : '24px'
         }}>
           {whyUs.map((item, i) => (
             <FadeIn key={i} delay={i * 0.15}>
@@ -535,29 +513,26 @@ export default function Home() {
                   background: 'rgba(255,255,255,0.03)',
                   border: '1px solid rgba(255,255,255,0.08)',
                   borderRadius: '16px',
-                  padding: isMobile ? '20px 14px' : '32px',
-                  textAlign: 'center',
-                  height: '100%'
+                  padding: isMobile ? '20px 16px' : '32px',
+                  textAlign: 'center'
                 }}>
                 <div style={{
                   width: isMobile ? '48px' : '64px',
                   height: isMobile ? '48px' : '64px',
                   borderRadius: '16px', background: `${item.color}20`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  margin: '0 auto 12px'
+                  margin: '0 auto 16px'
                 }}>
                   <item.icon size={isMobile ? 22 : 30} style={{ color: item.color }} />
                 </div>
                 <h3 style={{
                   color: '#fff', fontWeight: 700,
-                  fontSize: isMobile ? '13px' : '18px',
-                  marginBottom: '6px', lineHeight: 1.3
+                  fontSize: isMobile ? '14px' : '20px',
+                  marginBottom: '8px'
                 }}>{item.title}</h3>
-                <p style={{
-                  color: '#9ca3af',
-                  fontSize: isMobile ? '11px' : '14px',
-                  lineHeight: 1.5, margin: 0
-                }}>{item.desc}</p>
+                {!isMobile && (
+                  <p style={{ color: '#9ca3af', fontSize: '15px', lineHeight: 1.6 }}>{item.desc}</p>
+                )}
               </motion.div>
             </FadeIn>
           ))}
@@ -567,14 +542,14 @@ export default function Home() {
       {/* ===== REVIEWS ===== */}
       {reviews.length > 0 && (
         <section style={{
-          padding: isMobile ? '60px 20px' : '100px 24px',
+          padding: isMobile ? '60px 16px' : '100px 24px',
           background: 'rgba(99,102,241,0.03)',
           borderTop: '1px solid rgba(99,102,241,0.1)'
         }}>
           <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
             <FadeIn>
               <div style={{ textAlign: 'center', marginBottom: isMobile ? '32px' : '60px' }}>
-                <h2 style={{ fontSize: 'clamp(22px,4vw,48px)', fontWeight: 800, color: '#fff' }}>
+                <h2 style={{ fontSize: 'clamp(24px,4vw,48px)', fontWeight: 800, color: '#fff' }}>
                   What Our <span style={{
                     background: 'linear-gradient(135deg,#f59e0b,#fbbf24)',
                     WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
@@ -628,46 +603,46 @@ export default function Home() {
       )}
 
       {/* ===== CTA ===== */}
-      <section style={{ padding: isMobile ? '60px 20px' : '100px 24px' }}>
+      <section style={{ padding: isMobile ? '60px 16px' : '100px 24px' }}>
         <FadeIn>
           <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
             <div style={{
               background: 'linear-gradient(135deg,rgba(99,102,241,0.2),rgba(139,92,246,0.1))',
               border: '1px solid rgba(99,102,241,0.3)',
               borderRadius: '24px',
-              padding: isMobile ? '36px 20px' : '60px 40px'
+              padding: isMobile ? '40px 20px' : '60px 40px'
             }}>
-              <div style={{ fontSize: '40px', marginBottom: '16px' }}>🚀</div>
+              <div style={{ fontSize: '40px', marginBottom: '20px' }}>🚀</div>
               <h2 style={{
-                fontSize: isMobile ? '22px' : 'clamp(24px,4vw,40px)',
-                fontWeight: 800, color: '#fff', marginBottom: '10px'
+                fontSize: isMobile ? '24px' : 'clamp(24px,4vw,40px)',
+                fontWeight: 800, color: '#fff', marginBottom: '12px'
               }}>Ready to Start Your Project?</h2>
               <p style={{
                 color: '#9ca3af',
-                fontSize: isMobile ? '14px' : '17px',
-                marginBottom: '24px', lineHeight: 1.6
+                fontSize: isMobile ? '14px' : '18px',
+                marginBottom: '28px', lineHeight: 1.6
               }}>
                 Get in touch today and let's build something amazing together!
               </p>
               <div style={{
                 display: 'flex', gap: '12px', justifyContent: 'center',
-                flexDirection: 'column'
+                flexDirection: isMobile ? 'column' : 'row', flexWrap: 'wrap'
               }}>
-                <Link to="/contact" style={{ textDecoration: 'none', width: '100%' }}>
-                  <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+                <Link to="/contact" style={{ textDecoration: 'none' }}>
+                  <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                     style={{
                       padding: '14px 32px', borderRadius: '12px',
                       background: 'linear-gradient(135deg,#6366f1,#8b5cf6)',
                       color: '#fff', border: 'none', cursor: 'pointer',
                       fontSize: '15px', fontWeight: 600,
-                      width: '100%'
+                      width: isMobile ? '100%' : 'auto'
                     }}>
                     Contact Us Now
                   </motion.button>
                 </Link>
                 <a href="https://wa.me/917020521466" target="_blank" rel="noreferrer"
-                  style={{ textDecoration: 'none', width: '100%' }}>
-                  <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+                  style={{ textDecoration: 'none', width: isMobile ? '100%' : 'auto' }}>
+                  <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                     style={{
                       padding: '14px 32px', borderRadius: '12px',
                       background: 'rgba(37,211,102,0.15)',
