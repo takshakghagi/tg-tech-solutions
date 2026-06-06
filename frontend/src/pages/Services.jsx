@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import API from '../services/api';
 import { motion } from 'framer-motion';
 import {
   FaCode, FaMobileAlt, FaGraduationCap, FaBook,
   FaFileAlt, FaPaintBrush, FaIdCard, FaBriefcase,
   FaLaptopCode, FaWhatsapp, FaCheckCircle,
-  FaExternalLinkAlt, FaEye, FaShoppingCart,
+  FaExternalLinkAlt, FaEye, FaShoppingCart, FaGlobe,
   FaHospital, FaUniversity, FaBriefcase as FaWork
 } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
@@ -111,7 +112,7 @@ const sampleWebsites = [
   {
     title: 'E-Commerce Store',
     desc: 'Full featured online store with cart, payment & admin panel',
-    icon: FaShoppingCart,
+    icon: FaShoppingCart, FaGlobe,
     color: '#6366f1',
     bg: 'rgba(99,102,241,0.1)',
     tags: ['React.js', 'Node.js', 'MySQL'],
@@ -221,9 +222,41 @@ const sampleDocs = [
 ];
 
 export default function Services() {
-  const [filter, setFilter] = useState('All');
-  const [winW]              = useState(window.innerWidth);
-  const isMobile            = winW < 640;
+  const [filter,   setFilter]   = useState('All');
+  const [winW,     setWinW]     = useState(window.innerWidth);
+  const [websites, setWebsites] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [docs,     setDocs]     = useState([]);
+  const [loading,  setLoading]  = useState(true);
+
+  const isMobile = winW < 640;
+
+  useEffect(() => {
+    const onResize = () => setWinW(window.innerWidth);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  useEffect(() => {
+    const fetchAll = async () => {
+      setLoading(true);
+      try {
+        const [w, p, d] = await Promise.all([
+          API.get('/portfolio/websites'),
+          API.get('/portfolio/projects'),
+          API.get('/portfolio/docs'),
+        ]);
+        setWebsites(w.data.data || []);
+        setProjects(p.data.data || []);
+        setDocs(d.data.data    || []);
+      } catch (err) {
+        console.error('Portfolio fetch error:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAll();
+  }, []);
 
   const filtered = filter === 'All' ? services : services.filter(s => s.category === filter);
 
@@ -443,7 +476,11 @@ export default function Services() {
             gridTemplateColumns: isMobile ? '1fr' : 'repeat(2,1fr)',
             gap: isMobile ? '14px' : '20px'
           }}>
-            {sampleWebsites.map((site, i) => (
+            {loading ? <div style={{textAlign:'center',padding:'40px',color:'#6b7280'}}>Loading...</div> : websites.length === 0 ? <div style={{textAlign:'center',padding:'40px',color:'#6b7280'}}>No items added yet.</div> : null}
+            {websites.map((site, i) => {
+              const tagArr = site.tags ? site.tags.split(',') : [];
+              const priceStr = `₹${Number(site.price_min).toLocaleString()} – ₹${Number(site.price_max).toLocaleString()}`;
+              return (
               <motion.div key={i}
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.08 }}
@@ -455,7 +492,7 @@ export default function Services() {
                 }}>
                 {/* Image */}
                 <div style={{ height: isMobile ? '140px' : '180px', overflow: 'hidden', position: 'relative' }}>
-                  <img src={site.image} alt={site.title}
+                  <img src={site.image_url} alt={site.title}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top,rgba(15,15,26,0.85),transparent 50%)' }} />
                   {/* Price tag */}
@@ -465,27 +502,27 @@ export default function Services() {
                     background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)',
                     border: `1px solid ${site.color}50`,
                     color: site.color, fontSize: '11px', fontWeight: 700
-                  }}>{site.price}</div>
+                  }}>{priceStr}</div>
                 </div>
 
                 <div style={{ padding: isMobile ? '14px' : '18px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
                     <div style={{
                       width: '36px', height: '36px', borderRadius: '10px',
-                      background: site.bg, border: `1px solid ${site.color}30`,
+                      background: `${site.color}15`, border: `1px solid ${site.color}30`,
                       display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
                     }}>
-                      <site.icon size={16} style={{ color: site.color }} />
+                      <FaGlobe size={16} style={{ color: site.color }} />
                     </div>
                     <h3 style={{ color: '#fff', fontWeight: 700, fontSize: isMobile ? '14px' : '16px', margin: 0 }}>
                       {site.title}
                     </h3>
                   </div>
                   <p style={{ color: '#9ca3af', fontSize: '12px', lineHeight: 1.6, marginBottom: '12px' }}>
-                    {site.desc}
+                    {site.description}
                   </p>
                   <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '14px' }}>
-                    {site.tags.map((t, j) => (
+                    {tagArr.map((t, j) => (
                       <span key={j} style={{
                         padding: '3px 10px', borderRadius: '6px', fontSize: '10px',
                         background: site.bg, border: `1px solid ${site.color}30`, color: site.color
@@ -493,7 +530,7 @@ export default function Services() {
                     ))}
                   </div>
                   <div style={{ display: 'flex', gap: '8px' }}>
-                    <a href={site.link} target="_blank" rel="noreferrer" style={{ flex: 1 }}>
+                    <a href={site.live_link} target="_blank" rel="noreferrer" style={{ flex: 1 }}>
                       <motion.button whileTap={{ scale: 0.96 }}
                         style={{
                           width: '100%', padding: '9px',
@@ -521,7 +558,8 @@ export default function Services() {
                   </div>
                 </div>
               </motion.div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -553,7 +591,11 @@ export default function Services() {
           gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)',
           gap: isMobile ? '12px' : '18px'
         }}>
-          {availableProjects.map((proj, i) => (
+          {projects.length === 0 && !loading ? <div style={{textAlign:'center',padding:'40px',color:'#6b7280'}}>No projects added yet.</div> : null}
+          {projects.map((proj, i) => {
+            const projTags = proj.tags ? proj.tags.split(',') : [];
+            const projPrice = `₹${Number(proj.price_min).toLocaleString()} – ₹${Number(proj.price_max).toLocaleString()}`;
+            return (
             <motion.div key={i}
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.07 }}
@@ -580,7 +622,7 @@ export default function Services() {
                 {proj.desc}
               </p>
               <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap', marginBottom: '14px' }}>
-                {proj.tags.map((t, j) => (
+                {projTags.map((t, j) => (
                   <span key={j} style={{
                     padding: '2px 8px', borderRadius: '5px', fontSize: '10px',
                     background: `${proj.color}12`, border: `1px solid ${proj.color}25`, color: proj.color
@@ -589,7 +631,7 @@ export default function Services() {
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ color: '#fff', fontWeight: 800, fontSize: isMobile ? '14px' : '15px' }}>
-                  {proj.price}
+                  {projPrice}
                 </span>
                 <a href={`https://wa.me/917020521466?text=Hi! I want the ${proj.title} project`}
                   target="_blank" rel="noreferrer">
@@ -642,7 +684,10 @@ export default function Services() {
             gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4,1fr)',
             gap: isMobile ? '12px' : '16px'
           }}>
-            {sampleDocs.map((doc, i) => (
+            {docs.length === 0 && !loading ? <div style={{textAlign:'center',padding:'40px',color:'#6b7280'}}>No docs added yet.</div> : null}
+            {docs.map((doc, i) => {
+              const docPrice = `₹${Number(doc.price_min).toLocaleString()} – ₹${Number(doc.price_max).toLocaleString()}`;
+              return (
               <motion.div key={i}
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.08 }}
@@ -669,7 +714,7 @@ export default function Services() {
                   {doc.desc}
                 </p>
                 <p style={{ color: doc.color, fontWeight: 800, fontSize: isMobile ? '12px' : '14px', marginBottom: '12px' }}>
-                  {doc.price}
+                  {docPrice}
                 </p>
                 <a href={`https://wa.me/917020521466?text=Hi! I need ${doc.title}`}
                   target="_blank" rel="noreferrer">
