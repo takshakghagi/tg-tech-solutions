@@ -1,111 +1,129 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   MdDashboard, MdPeople, MdShoppingCart, MdBook,
   MdMiscellaneousServices, MdStar, MdAttachMoney,
-  MdNotifications, MdLogout, MdMenu, MdClose
+  MdNotifications, MdLogout, MdClose
 } from 'react-icons/md';
 import { useAuth } from '../../context/AuthContext';
-import { useState } from 'react';
 
 const menuItems = [
-  { path: '/admin/dashboard',  label: 'Dashboard',   icon: MdDashboard },
-  { path: '/admin/users',      label: 'Users',        icon: MdPeople },
-  { path: '/admin/orders',     label: 'Orders',       icon: MdShoppingCart },
-  { path: '/admin/notes',      label: 'Notes',        icon: MdBook },
-  { path: '/admin/services',   label: 'Services',     icon: MdMiscellaneousServices },
-  { path: '/admin/reviews',    label: 'Reviews',      icon: MdStar },
-  { path: '/admin/revenue',    label: 'Revenue',      icon: MdAttachMoney },
+  { path: '/admin/dashboard',     label: 'Dashboard',     icon: MdDashboard },
+  { path: '/admin/users',         label: 'Users',         icon: MdPeople },
+  { path: '/admin/orders',        label: 'Orders',        icon: MdShoppingCart },
+  { path: '/admin/notes',         label: 'Notes',         icon: MdBook },
+  { path: '/admin/services',      label: 'Services',      icon: MdMiscellaneousServices },
+  { path: '/admin/reviews',       label: 'Reviews',       icon: MdStar },
+  { path: '/admin/revenue',       label: 'Revenue',       icon: MdAttachMoney },
   { path: '/admin/notifications', label: 'Notifications', icon: MdNotifications },
 ];
 
 export default function AdminSidebar({ isOpen, setIsOpen }) {
   const { user, logout } = useAuth();
+  const isMobile = window.innerWidth < 1024;
 
   return (
     <>
       {/* Mobile Overlay */}
       <AnimatePresence>
-        {isOpen && (
+        {isOpen && isMobile && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={() => setIsOpen(false)}
-            className="fixed inset-0 bg-black/60 z-40 lg:hidden"
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 40 }}
           />
         )}
       </AnimatePresence>
 
       {/* Sidebar */}
-      <motion.aside
-        initial={false}
-        animate={{ x: isOpen ? 0 : '-100%' }}
-        className="fixed left-0 top-0 h-full w-64 z-50 lg:translate-x-0 lg:static lg:z-auto"
-        style={{
-          background: 'linear-gradient(180deg, #0f0f1a 0%, #1a1a2e 100%)',
-          borderRight: '1px solid rgba(99,102,241,0.2)'
-        }}
-      >
+      <div style={{
+        width: '256px', height: '100vh',
+        background: 'linear-gradient(180deg, #0f0f1a 0%, #1a1a2e 100%)',
+        borderRight: '1px solid rgba(99,102,241,0.2)',
+        display: 'flex', flexDirection: 'column',
+        position: 'relative', zIndex: 50,
+        overflowY: 'auto'
+      }}>
+
         {/* Logo */}
-        <div className="flex items-center justify-between p-6 border-b border-indigo-500/20">
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '24px', borderBottom: '1px solid rgba(99,102,241,0.2)'
+        }}>
           <div>
-            <h1 className="text-xl font-bold gradient-text">TG Tech</h1>
-            <p className="text-xs text-gray-400">Admin Panel</p>
+            <h1 style={{
+              fontSize: '20px', fontWeight: 800, margin: 0,
+              background: 'linear-gradient(135deg,#6366f1,#a855f7)',
+              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
+            }}>TG Tech</h1>
+            <p style={{ color: '#6b7280', fontSize: '12px', margin: 0 }}>Admin Panel</p>
           </div>
-          <button
-            onClick={() => setIsOpen(false)}
-            className="lg:hidden text-gray-400 hover:text-white"
-          >
-            <MdClose size={20} />
-          </button>
+          {isMobile && (
+            <button onClick={() => setIsOpen(false)}
+              style={{ background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer' }}>
+              <MdClose size={20} />
+            </button>
+          )}
         </div>
 
         {/* Admin Info */}
-        <div className="p-4 m-4 rounded-xl glass">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full gradient-bg flex items-center justify-center text-white font-bold">
+        <div style={{
+          margin: '16px', padding: '14px', borderRadius: '12px',
+          background: 'rgba(255,255,255,0.04)',
+          border: '1px solid rgba(255,255,255,0.08)'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{
+              width: '40px', height: '40px', borderRadius: '50%',
+              background: 'linear-gradient(135deg,#6366f1,#8b5cf6)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: '#fff', fontWeight: 700, fontSize: '16px', flexShrink: 0
+            }}>
               {user?.name?.charAt(0) || 'A'}
             </div>
             <div>
-              <p className="text-sm font-semibold text-white">{user?.name}</p>
-              <p className="text-xs text-indigo-400">Administrator</p>
+              <p style={{ color: '#fff', fontSize: '14px', fontWeight: 600, margin: 0 }}>{user?.name}</p>
+              <p style={{ color: '#818cf8', fontSize: '12px', margin: 0 }}>Administrator</p>
             </div>
           </div>
         </div>
 
         {/* Menu Items */}
-        <nav className="px-4 mt-2 flex-1">
+        <nav style={{ padding: '0 12px', flex: 1 }}>
           {menuItems.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              onClick={() => setIsOpen(false)}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-xl mb-1 transition-all duration-200 ${
-                  isActive
-                    ? 'gradient-bg text-white shadow-lg shadow-indigo-500/25'
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
-                }`
-              }
-            >
+            <NavLink key={item.path} to={item.path}
+              onClick={() => isMobile && setIsOpen(false)}
+              style={({ isActive }) => ({
+                display: 'flex', alignItems: 'center', gap: '12px',
+                padding: '12px 16px', borderRadius: '12px',
+                marginBottom: '4px', textDecoration: 'none',
+                fontSize: '14px', fontWeight: 500,
+                transition: 'all 0.2s',
+                background: isActive ? 'linear-gradient(135deg,#6366f1,#8b5cf6)' : 'transparent',
+                color: isActive ? '#fff' : '#9ca3af',
+                boxShadow: isActive ? '0 4px 15px rgba(99,102,241,0.3)' : 'none',
+              })}>
               <item.icon size={20} />
-              <span className="text-sm font-medium">{item.label}</span>
+              <span>{item.label}</span>
             </NavLink>
           ))}
         </nav>
 
         {/* Logout */}
-        <div className="p-4 border-t border-indigo-500/20">
-          <button
-            onClick={logout}
-            className="flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all w-full"
-          >
+        <div style={{ padding: '16px', borderTop: '1px solid rgba(99,102,241,0.15)' }}>
+          <button onClick={logout}
+            style={{
+              display: 'flex', alignItems: 'center', gap: '12px',
+              padding: '12px 16px', borderRadius: '12px',
+              background: 'none', border: 'none', cursor: 'pointer',
+              color: '#f87171', fontSize: '14px', fontWeight: 500,
+              width: '100%', transition: 'all 0.2s'
+            }}>
             <MdLogout size={20} />
-            <span className="text-sm font-medium">Logout</span>
+            <span>Logout</span>
           </button>
         </div>
-      </motion.aside>
+      </div>
     </>
   );
 }
