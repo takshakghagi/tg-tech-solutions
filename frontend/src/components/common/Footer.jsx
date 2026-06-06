@@ -119,7 +119,7 @@ export default function Footer() {
                   <MdLocationOn size={16} style={{ color: '#6366f1' }} />
                 </div>
                 <span style={{ color: '#9ca3af', fontSize: '13px', lineHeight: 1.5 }}>
-                  Nagpur, Maharashtra,<br />India — 440001
+                  Warora, Nagpur, Pune — Maharashtra
                 </span>
               </div>
               <a href="https://wa.me/917020521466" target="_blank" rel="noreferrer"

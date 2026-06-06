@@ -127,7 +127,7 @@ export default function About() {
                 color: '#9ca3af', fontSize: '16px',
                 lineHeight: 1.8, marginBottom: '32px'
               }}>
-                I am a passionate Full Stack Developer from Nagpur, Maharashtra.
+                I am a passionate Full Stack Developer from Warora, Nagpur & Pune.
                 I specialize in building modern web applications, mobile apps,
                 and helping students with their final year projects.
                 With 3+ years of experience, I have helped 500+ students and businesses
@@ -137,7 +137,7 @@ export default function About() {
               {/* Contact Info */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '32px' }}>
                 {[
-                  { icon: FaMapMarkerAlt, text: 'Nagpur, Maharashtra, India', color: '#6366f1' },
+                  { icon: FaMapMarkerAlt, text: 'Warora, Nagpur, Pune — Maharashtra', color: '#6366f1' },
                   { icon: FaPhone,        text: '+91 7020521466',              color: '#10b981' },
                   { icon: FaEnvelope,     text: 'ghagitakshak@gmail.com',     color: '#f59e0b' },
                 ].map((item, i) => (
@@ -259,7 +259,7 @@ export default function About() {
                   Full Stack Developer
                 </p>
                 <p style={{ color: '#6b7280', fontSize: '13px', marginBottom: '24px' }}>
-                  Nagpur, Maharashtra
+                  Warora, Nagpur, Pune
                 </p>
 
                 {/* Stats */}

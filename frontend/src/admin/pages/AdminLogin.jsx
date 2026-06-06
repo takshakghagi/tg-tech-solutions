@@ -133,7 +133,7 @@ export default function AdminLogin() {
         </div>
 
         <p className="text-center text-gray-500 text-xs mt-6">
-          © 2024 TG Tech Solutions — Nagpur
+          © 2024 TG Tech Solutions — Warora, Nagpur, Pune
         </p>
       </motion.div>
     </div>

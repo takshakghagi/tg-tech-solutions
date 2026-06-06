@@ -28,7 +28,7 @@ export default function Contact() {
     { icon: FaPhone,        label: 'Phone',    value: '+91 7020521466',          href: 'tel:+917020521466',               color: '#6366f1' },
     { icon: FaWhatsapp,     label: 'WhatsApp', value: '+91 7020521466',          href: 'https://wa.me/917020521466',      color: '#25d366' },
     { icon: FaEnvelope,     label: 'Email',    value: 'ghagitakshak@gmail.com',  href: 'mailto:ghagitakshak@gmail.com',   color: '#f59e0b' },
-    { icon: FaMapMarkerAlt, label: 'Location', value: 'Nagpur, Maharashtra',     href: '#map',                            color: '#ef4444' },
+    { icon: FaMapMarkerAlt, label: 'Location', value: 'Warora, Nagpur, Pune — Maharashtra',     href: '#map',                            color: '#ef4444' },
   ];
 
   return (
