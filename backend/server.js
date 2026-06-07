@@ -4,6 +4,7 @@ const http       = require('http');
 const { Server } = require('socket.io');
 const logger     = require('./src/utils/logger');
 const { connectDB } = require('./src/config/db');
+const { startKeepAlive } = require('./src/utils/keepAlive');
 
 const PORT   = process.env.PORT || 5000;
 const server = http.createServer(app);
@@ -47,6 +48,11 @@ connectDB().then(() => {
     logger.info(`📍 Environment: ${process.env.NODE_ENV}`);
     logger.info(`🌐 URL: http://localhost:${PORT}`);
     logger.info(`❤️  Health: http://localhost:${PORT}/health`);
+
+    // Start keep-alive only on production
+    if (process.env.NODE_ENV === 'production') {
+      startKeepAlive();
+    }
   });
 }).catch(err => {
   logger.error(`Database connection failed: ${err.message}`);
