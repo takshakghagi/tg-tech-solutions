@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShopX — Login</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#f3f3f3; font-family:Arial,sans-serif; display:flex; flex-direction:column; min-height:100vh; }
+  .topbar { background:#131921; padding:12px 20px; }
+  .logo { color:white; font-size:24px; font-weight:900; }
+  .logo span { color:#FF6B00; }
+  .container { flex:1; display:flex; align-items:center; justify-content:center; padding:20px; }
+  .card { background:white; border:1px solid #ddd; border-radius:8px; padding:32px; width:100%; max-width:400px; }
+  h2 { font-size:22px; margin-bottom:20px; }
+  .input-group { margin-bottom:16px; }
+  label { display:block; font-size:13px; font-weight:700; margin-bottom:6px; }
+  input { width:100%; padding:10px; border:1px solid #aaa; border-radius:4px; font-size:14px; outline:none; }
+  input:focus { border-color:#FF6B00; box-shadow:0 0 0 2px rgba(255,107,0,0.2); }
+  .btn { width:100%; background:#FFD814; border:none; padding:12px; font-size:15px; font-weight:700; border-radius:4px; cursor:pointer; margin-top:8px; }
+  .btn:hover { background:#F0C400; }
+  .divider { text-align:center; color:#aaa; margin:16px 0; font-size:13px; }
+  .btn-outline { width:100%; background:white; border:1px solid #aaa; padding:12px; font-size:15px; font-weight:700; border-radius:4px; cursor:pointer; }
+  .btn-outline:hover { background:#f3f3f3; }
+  .msg { padding:10px; border-radius:4px; margin-bottom:16px; font-size:13px; text-align:center; display:none; }
+  .msg.success { background:#d4edda; color:#155724; }
+  .msg.error { background:#f8d7da; color:#721c24; }
+  .toggle { text-align:center; margin-top:16px; font-size:13px; color:#555; }
+  .toggle a { color:#007185; cursor:pointer; text-decoration:underline; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">Shop<span>X</span></div>
+</div>
+
+<div class="container">
+  <div class="card">
+    <div class="msg" id="msg"></div>
+
+    <!-- LOGIN FORM -->
+    <div id="loginForm">
+      <h2>Sign In</h2>
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" id="loginEmail" placeholder="Enter your email">
+      </div>
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter your password">
+      </div>
+      <button class="btn" id="loginBtn">Sign In</button>
+      <div class="divider">— New to ShopX? —</div>
+      <button class="btn-outline" onclick="showRegister()">Create Account</button>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div id="registerForm" style="display:none">
+      <h2>Create Account</h2>
+      <div class="input-group">
+        <label>Full Name</label>
+        <input type="text" id="regName" placeholder="Enter your name">
+      </div>
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" id="regEmail" placeholder="Enter your email">
+      </div>
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" id="regPassword" placeholder="Create password">
+      </div>
+      <button class="btn" id="registerBtn">Create Account</button>
+      <div class="divider">— Already have account? —</div>
+      <button class="btn-outline" onclick="showLogin()">Sign In</button>
+    </div>
+
+    <div class="toggle" id="toggleText">
+      <a onclick="showRegister()">New user? Create account</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'http://localhost:5000/api';
+
+function showMsg(text, type) {
+  const msg = document.getElementById('msg');
+  msg.textContent = text;
+  msg.className = 'msg ' + type;
+  msg.style.display = 'block';
+  setTimeout(() => msg.style.display = 'none', 3000);
+}
+
+function showRegister() {
+  document.getElementById('loginForm').style.display = 'none';
+  document.getElementById('registerForm').style.display = 'block';
+  document.getElementById('toggleText').innerHTML = '<a onclick="showLogin()">Already have account? Sign In</a>';
+}
+
+function showLogin() {
+  document.getElementById('registerForm').style.display = 'none';
+  document.getElementById('loginForm').style.display = 'block';
+  document.getElementById('toggleText').innerHTML = '<a onclick="showRegister()">New user? Create account</a>';
+}
+
+async function register() {
+  const name = document.getElementById('regName').value;
+  const email = document.getElementById('regEmail').value;
+  const password = document.getElementById('regPassword').value;
+
+  if(!name || !email || !password) {
+    showMsg('Please fill all fields!', 'error');
+    return;
+  }
+
+  try {
+    const res = await fetch(API + '/users/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password })
+    });
+    const data = await res.json();
+    if(data.error) { showMsg(data.error, 'error'); return; }
+    showMsg('Account created! Please login.', 'success');
+    setTimeout(showLogin, 1500);
+  } catch(err) {
+    showMsg('Server error! Make sure backend is running.', 'error');
+  }
+}
+
+async function login() {
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+
+  if(!email || !password) {
+    showMsg('Please fill all fields!', 'error');
+    return;
+  }
+
+  try {
+    const res = await fetch(API + '/users/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if(data.error) { showMsg(data.error, 'error'); return; }
+
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(data.user));
+    showMsg('Welcome back, ' + data.user.name + '! 🎉', 'success');
+    setTimeout(function() {
+      window.location.href = 'ecommerce_v3.html';
+    }, 1500);
+  } catch(err) {
+    showMsg('Server error! Make sure backend is running.', 'error');
+  }
+}
+
+// Event listeners
+document.getElementById('loginBtn').addEventListener('click', login);
+document.getElementById('registerBtn').addEventListener('click', register);
+</script>
+
+</body>
+</html>
